@@ -1,5 +1,6 @@
 package com.example.stevenmaccoun.morningmoment;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.ListViewCompat;
@@ -21,7 +22,6 @@ public class MainActivity extends AppCompatActivity {
         popularLV = (ListView) findViewById(R.id.popular);
 
         initializePopularLV();
-
 
     }
 
@@ -46,9 +46,13 @@ public class MainActivity extends AppCompatActivity {
 
                 String itemValue = (String) popularLV.getItemAtPosition(position);
 
-                Toast.makeText(getApplicationContext(),
-                        "Position :"+itemPosition+"  ListItem : " +itemValue , Toast.LENGTH_LONG)
-                        .show();
+//                Toast.makeText(getApplicationContext(),
+//                        "Position :"+itemPosition+"  ListItem : " +itemValue , Toast.LENGTH_LONG)
+//                        .show();
+
+                Intent i = new Intent(MainActivity.this, RoutineActivity.class);
+                i.putExtra("test", "hello");
+                startActivity(i);
             }
         });
     }
