@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">MorningMoment</string>
+    <string name="title_activity_routine_activity">routine_activity</string>
 </resources>
