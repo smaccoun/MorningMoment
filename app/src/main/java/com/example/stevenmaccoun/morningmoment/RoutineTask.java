@@ -1,6 +1,8 @@
 package com.example.stevenmaccoun.morningmoment;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by stevenmaccoun on 4/14/16.
@@ -9,11 +11,12 @@ public class RoutineTask {
 
     private String title;
     private String description;
-    private SimpleDateFormat duration;
+    private Date duration;
 
-    public RoutineTask(String title, String description){
+    public RoutineTask(String title, String description, Date duration){
         this.title = title;
         this.description = description;
+        this.duration = duration;
     }
 
     public String getTitle() {
@@ -24,8 +27,12 @@ public class RoutineTask {
         return description;
     }
 
-    public SimpleDateFormat getDuration() {
+    public Date getDurationDate() {
         return duration;
+    }
+
+    public String getDurationString(){
+        return new SimpleDateFormat("HH:mm").format(duration);
     }
 
 

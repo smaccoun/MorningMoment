@@ -15,6 +15,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,23 +50,10 @@ public class RoutineActivity extends AppCompatActivity {
 
     private void initializeRoutineTasksLV(){
 
-        String[] taskList = new String[] {
-            "Alexander Stomach",
-            "5 minute tapping",
-            "10 minute integral body",
-                "10 minute intention setting"
-        };
-
-        ArrayList<RoutineTask> sampleTasks = new ArrayList<>();
-
-        for(int i=0; i < taskList.length; ++i ){
-            sampleTasks.add(i, new RoutineTask(taskList[i], "blah"));
-        }
-
-        RoutineTaskAdapter routineTasksLVAdapter = new RoutineTaskAdapter(this, sampleTasks);
+        ArrayList<RoutineTask> routineTasks = loadRoutineTasks();
+        RoutineTaskAdapter routineTasksLVAdapter = new RoutineTaskAdapter(this, routineTasks);
 
         routineTasksLV.setAdapter(routineTasksLVAdapter);
-
         routineTasksLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -79,6 +67,30 @@ public class RoutineActivity extends AppCompatActivity {
                         .show();
             }
         });
+    }
+
+    
+    private ArrayList<RoutineTask> loadRoutineTasks()
+    {
+        String[] taskList = new String[] {
+                "Alexander Stomach",
+                "Self-love tapping",
+                "Integral body",
+                "Intention setting"
+        };
+
+        ArrayList<RoutineTask> routineTasks = new ArrayList<>();
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+
+        for(int i=0; i < taskList.length; ++i ){
+            try {
+                routineTasks.add(i, new RoutineTask(taskList[i], "blah", sdf.parse("05:00")));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        
+        return routineTasks;
     }
 
     private class RoutineTaskAdapter extends ArrayAdapter<RoutineTask> {
@@ -98,9 +110,11 @@ public class RoutineActivity extends AppCompatActivity {
             // Lookup view for data population
             TextView taskTtile = (TextView) convertView.findViewById(R.id.task_title);
             TextView taskDescription = (TextView) convertView.findViewById(R.id.task_description);
+            TextView taskDuration = (TextView) convertView.findViewById(R.id.task_duration);
             // Populate the data into the template view using the data object
             taskTtile.setText(rt.getTitle());
             taskDescription.setText(rt.getDescription());
+            taskDuration.setText(rt.getDurationString());
             // Return the completed view to render on screen
             return convertView;
         }
