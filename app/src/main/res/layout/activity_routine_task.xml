@@ -16,7 +16,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:background="@color/design_textinput_error_color_dark">
+        android:background="@android:color/holo_blue_bright">
 
         <TextView
             android:layout_width="wrap_content"
@@ -32,7 +32,8 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="Description"
             android:id="@+id/task_description"
-            android:background="@color/accent_material_dark" />
+            android:background="@color/design_textinput_error_color_dark"
+            android:textColor="@color/abc_input_method_navigation_guard" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -40,7 +41,9 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="00:00:00"
             android:id="@+id/task_duration"
-            android:layout_gravity="center_horizontal" />
+            android:layout_gravity="center_horizontal"
+            android:background="@color/abc_input_method_navigation_guard"
+            android:textColor="@android:color/holo_green_light" />
 
     </LinearLayout>
 </RelativeLayout>

@@ -101,11 +101,11 @@ public class RoutineActivity extends AppCompatActivity {
         };
 
         ArrayList<RoutineTask> routineTasks = new ArrayList<>();
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
 
         for(int i=0; i < taskList.length; ++i ){
             try {
-                routineTasks.add(i, new RoutineTask(taskList[i], "blah", sdf.parse("05:00")));
+                routineTasks.add(i, new RoutineTask(taskList[i], "blah", sdf.parse("00:05:00")));
             } catch (ParseException e) {
                 e.printStackTrace();
             }

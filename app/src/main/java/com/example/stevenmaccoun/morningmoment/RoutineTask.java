@@ -32,7 +32,7 @@ public class RoutineTask {
     }
 
     public String getDurationString(){
-        return new SimpleDateFormat("HH:mm").format(duration);
+        return new SimpleDateFormat("HH:mm:ss").format(duration);
     }
 
 
