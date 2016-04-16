@@ -1,8 +1,7 @@
 package com.example.stevenmaccoun.morningmoment;
 
-import android.content.ClipData;
 import android.content.Context;
-import android.graphics.Color;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -18,7 +17,6 @@ import android.widget.Toast;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.List;
 
 public class RoutineActivity extends AppCompatActivity {
 
@@ -60,11 +58,19 @@ public class RoutineActivity extends AppCompatActivity {
                 int itemPosition = position;
 
                 RoutineTask rt = (RoutineTask) routineTasksLV.getItemAtPosition(position);
+                String title = rt.getTitle();
                 String description = rt.getDescription();
+                String duration = rt.getDurationString();
 
-                Toast.makeText(getApplicationContext(),
-                        "Position :"+itemPosition+"  ListItem : " + description , Toast.LENGTH_LONG)
-                        .show();
+//                Toast.makeText(getApplicationContext(),
+//                        "Position :"+itemPosition+"  ListItem : " + description , Toast.LENGTH_LONG)
+//                        .show();
+
+                Intent i = new Intent(RoutineActivity.this, RoutineTaskActivity.class);
+                i.putExtra("title", title);
+                i.putExtra("description", description);
+                i.putExtra("duration", duration);
+                startActivity(i);
             }
         });
     }
@@ -105,12 +111,12 @@ public class RoutineActivity extends AppCompatActivity {
             // Check if an existing view is being reused, otherwise inflate the view
             if (convertView == null) {
                 convertView = LayoutInflater.from(getContext()).
-                        inflate(R.layout.activity_routine_task, parent, false);
+                        inflate(R.layout.activity_routine_task_lv, parent, false);
             }
             // Lookup view for data population
-            TextView taskTtile = (TextView) convertView.findViewById(R.id.task_title);
-            TextView taskDescription = (TextView) convertView.findViewById(R.id.task_description);
-            TextView taskDuration = (TextView) convertView.findViewById(R.id.task_duration);
+            TextView taskTtile = (TextView) convertView.findViewById(R.id.task_title_lv);
+            TextView taskDescription = (TextView) convertView.findViewById(R.id.task_description_lv);
+            TextView taskDuration = (TextView) convertView.findViewById(R.id.task_duration_lv);
             // Populate the data into the template view using the data object
             taskTtile.setText(rt.getTitle());
             taskDescription.setText(rt.getDescription());
