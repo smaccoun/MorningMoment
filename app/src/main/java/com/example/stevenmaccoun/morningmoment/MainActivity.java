@@ -44,16 +44,11 @@ public class MainActivity extends AppCompatActivity {
         popularLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                int itemPosition = position;
 
-                String itemValue = (String) popularLV.getItemAtPosition(position);
-
-//                Toast.makeText(getApplicationContext(),
-//                        "Position :"+itemPosition+"  ListItem : " +itemValue , Toast.LENGTH_LONG)
-//                        .show();
+                String routineName = (String) popularLV.getItemAtPosition(position);
 
                 Intent i = new Intent(MainActivity.this, RoutineActivity.class);
-                i.putExtra("test", "hello");
+                i.putExtra("routine_name", routineName);
                 startActivity(i);
             }
         });

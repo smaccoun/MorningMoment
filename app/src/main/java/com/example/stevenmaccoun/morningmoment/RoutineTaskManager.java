@@ -12,12 +12,11 @@ public class RoutineTaskManager {
     private HashMap<Integer, RoutineTask> routineActivities;
     private Integer currentTaskNumber;
 
-    public RoutineTaskManager(String routineName, HashMap<Integer, RoutineTask> routineActivities,
-                              Integer currentTaskNumber)
+    public RoutineTaskManager(String routineName, HashMap<Integer, RoutineTask> routineActivities)
     {
         this.routineName = new String(routineName);
         this.routineActivities = new HashMap<Integer, RoutineTask>(routineActivities);
-        this.currentTaskNumber = new Integer(currentTaskNumber);
+        this.currentTaskNumber = new Integer(0);
     }
 
     public Integer getCurrentTaskNumber() {

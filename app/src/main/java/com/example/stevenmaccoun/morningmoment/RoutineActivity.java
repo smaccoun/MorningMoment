@@ -17,16 +17,21 @@ import android.widget.Toast;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class RoutineActivity extends AppCompatActivity {
 
     private ListView routineTasksLV;
     private Button beginRoutineB;
+    private RoutineTaskAdapter routineTasksLVAdapter;
+
+    private Intent previousIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_routine);
+        previousIntent = getIntent();
 
         routineTasksLV = (ListView) findViewById(R.id.routine_items);
         
@@ -38,33 +43,43 @@ public class RoutineActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 routineTasksLV.setItemChecked(1, true);
-                Toast.makeText(getApplicationContext(),
-                        String.valueOf(routineTasksLV.getItemIdAtPosition(1)), Toast.LENGTH_SHORT)
-                        .show();
+                RoutineTaskManager rtm = createRoutineTaskManager();
+                RoutineTask currentTask = rtm.getCurrentTask();
+                Intent i = new Intent(RoutineActivity.this, RoutineTaskActivity.class);
+                i.putExtra("title", currentTask.getTitle());
+                i.putExtra("description", currentTask.getDescription());
+                i.putExtra("duration", currentTask.getDurationString());
+                startActivity(i);
 
             }
         });
     }
 
+    private RoutineTaskManager createRoutineTaskManager(){
+        ArrayList<RoutineTask> routineTasks = routineTasksLVAdapter.getRoutineTasks();
+        HashMap<Integer, RoutineTask> routineTaskHashMap = new HashMap<Integer, RoutineTask>();
+        for(int i = 0; i < routineTasks.size(); ++i){
+            routineTaskHashMap.put(i, routineTasks.get(i));
+        }
+
+        RoutineTaskManager rtm = new RoutineTaskManager(previousIntent.getStringExtra("routine_name"),
+                routineTaskHashMap);
+
+        return rtm;
+    }
+
     private void initializeRoutineTasksLV(){
 
-        ArrayList<RoutineTask> routineTasks = loadRoutineTasks();
-        RoutineTaskAdapter routineTasksLVAdapter = new RoutineTaskAdapter(this, routineTasks);
-
+        routineTasksLVAdapter = new RoutineTaskAdapter(this, loadRoutineTasks());
         routineTasksLV.setAdapter(routineTasksLVAdapter);
         routineTasksLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                int itemPosition = position;
 
                 RoutineTask rt = (RoutineTask) routineTasksLV.getItemAtPosition(position);
                 String title = rt.getTitle();
                 String description = rt.getDescription();
                 String duration = rt.getDurationString();
-
-//                Toast.makeText(getApplicationContext(),
-//                        "Position :"+itemPosition+"  ListItem : " + description , Toast.LENGTH_LONG)
-//                        .show();
 
                 Intent i = new Intent(RoutineActivity.this, RoutineTaskActivity.class);
                 i.putExtra("title", title);
@@ -100,9 +115,14 @@ public class RoutineActivity extends AppCompatActivity {
     }
 
     private class RoutineTaskAdapter extends ArrayAdapter<RoutineTask> {
+        private ArrayList<RoutineTask> routineTasks;
+
         public RoutineTaskAdapter(Context context, ArrayList<RoutineTask> routineTasks) {
             super(context, 0, routineTasks);
+            this.routineTasks = routineTasks;
         }
+
+        public ArrayList<RoutineTask> getRoutineTasks(){ return routineTasks;}
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
