@@ -12,7 +12,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -70,7 +69,8 @@ public class RoutineActivity extends AppCompatActivity {
 
     private void initializeRoutineTasksLV(){
 
-        routineTasksLVAdapter = new RoutineTaskAdapter(this, loadRoutineTasks());
+        Routine routine = loadRoutine();
+        routineTasksLVAdapter = new RoutineTaskAdapter(this, routine.getRoutineTasks());
         routineTasksLV.setAdapter(routineTasksLVAdapter);
         routineTasksLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -91,7 +91,7 @@ public class RoutineActivity extends AppCompatActivity {
     }
 
     
-    private ArrayList<RoutineTask> loadRoutineTasks()
+    private Routine loadRoutine()
     {
         String[] taskList = new String[] {
                 "Alexander Stomach",
@@ -103,15 +103,23 @@ public class RoutineActivity extends AppCompatActivity {
         ArrayList<RoutineTask> routineTasks = new ArrayList<>();
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
 
-        for(int i=0; i < taskList.length; ++i ){
-            try {
-                routineTasks.add(i, new RoutineTask(taskList[i], "blah", sdf.parse("00:05:00")));
-            } catch (ParseException e) {
-                e.printStackTrace();
+        Routine routine = null;
+
+        try
+        {
+            for(int i=0; i < taskList.length; ++i ){
+                    routineTasks.add(i, new RoutineTask(taskList[i], "blah", sdf.parse("00:05:00")));
             }
+
+            routine = new Routine("30 Minute Routine", routineTasks, sdf.parse("00:05:00").getTime());
         }
+        catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
         
-        return routineTasks;
+        return routine;
     }
 
     private class RoutineTaskAdapter extends ArrayAdapter<RoutineTask> {

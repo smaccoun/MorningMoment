@@ -36,8 +36,11 @@ public class MainActivity extends AppCompatActivity {
                 "1 Hour"
         };
 
+        RoutineStorage rs = new RoutineStorage();
+        rs.loadDefaultRoutines();
+
         ArrayAdapter<String> popularLVAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, android.R.id.text1, popularTimes);
+                android.R.layout.simple_list_item_1, android.R.id.text1, rs.getAllRoutineNames());
 
         popularLV.setAdapter(popularLVAdapter);
 

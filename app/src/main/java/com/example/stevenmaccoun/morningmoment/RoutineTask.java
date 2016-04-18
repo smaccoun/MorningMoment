@@ -31,6 +31,14 @@ public class RoutineTask {
         return duration;
     }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setDuration(Date duration) {
+        this.duration = duration;
+    }
+
     public String getDurationString(){
         return new SimpleDateFormat("HH:mm:ss").format(duration);
     }
