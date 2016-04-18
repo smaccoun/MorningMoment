@@ -9,7 +9,7 @@ import java.util.HashMap;
  */
 public interface IRoutineStorage {
 
-    HashMap<String, Routine> cachedRoutines = new HashMap<>();
+    HashMap<Integer, Routine> cachedRoutines = new HashMap<>();
 
     Routine createRoutine(String title, ArrayList<RoutineTask> routineTasks, Date duration);
 
