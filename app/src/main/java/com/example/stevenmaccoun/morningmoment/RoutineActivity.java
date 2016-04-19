@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CursorAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -62,7 +63,7 @@ public class RoutineActivity extends AppCompatActivity {
         String rtNmString = '"' + previousIntent.getStringExtra("routine_nm") + '"';
 
         String rtView =
-                " SELECT task_nm " +
+                " SELECT rt._id, rt.task_nm, rt.task_desc " +
                         " FROM RoutineTask rt " +
                         " INNER JOIN Routine r " +
                         " ON rt.routine_nm = r.routine_nm" +
@@ -76,14 +77,14 @@ public class RoutineActivity extends AppCompatActivity {
         try {
             c.moveToFirst();
             while (c.moveToNext()) {
-                RoutineTask rt = new RoutineTask(c.getString(1), c.getString(2), 30000);
+                RoutineTask rt = new RoutineTask(c.getString(1), c.getString(2), 3000);
                 routineTaskHashMap.put(c.getPosition(), rt);
             }
         } catch (Exception e){
             c.close();
         }
 
-        RoutineTaskManager rtm = new RoutineTaskManager(previousIntent.getStringExtra("routine_name"),
+        RoutineTaskManager rtm = new RoutineTaskManager(previousIntent.getStringExtra("routine_nm"),
                 routineTaskHashMap);
 
         return rtm;
@@ -94,7 +95,7 @@ public class RoutineActivity extends AppCompatActivity {
         String rtNmString = '"' + previousIntent.getStringExtra("routine_nm") + '"';
 
         String rtView =
-                " SELECT * " +
+                " SELECT rt._id, rt.task_nm, rt.task_desc, rt.duration_ms " +
                 " FROM RoutineTask rt " +
                 " INNER JOIN Routine r " +
                 " ON rt.routine_nm = r.routine_nm" +
@@ -105,12 +106,13 @@ public class RoutineActivity extends AppCompatActivity {
                                     .getWritableDatabase().rawQuery(rtView, null);
         RoutineTaskAdapter routineTaskAdapter = new RoutineTaskAdapter(this, routineTasksLVCursor, 0);
         routineTasksLV.setAdapter(routineTaskAdapter);
+
         routineTasksLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 Cursor c = (Cursor) routineTasksLV.getItemAtPosition(position);
-                RoutineTask rt = new RoutineTask(c.getString(2), c.getString(3), 3);
+                RoutineTask rt = new RoutineTask(c.getString(1), c.getString(2), c.getInt(3));
                 String title = rt.getTitle();
                 String description = rt.getDescription();
                 String duration = rt.getDurationString();
@@ -124,71 +126,34 @@ public class RoutineActivity extends AppCompatActivity {
         });
     }
 
-    
-    private Routine loadRoutine()
-    {
-        String[] taskList = new String[] {
-                "Alexander Stomach",
-                "Self-love tapping",
-                "Integral body",
-                "Intention setting"
-        };
-
-        ArrayList<RoutineTask> routineTasks = new ArrayList<>();
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-
-        Routine routine = null;
-
-        try
-        {
-            for(int i=0; i < taskList.length; ++i ){
-                    routineTasks.add(i, new RoutineTask(taskList[i], "blah", 10000));
-            }
-
-            routine = new Routine("30 Minute Routine", routineTasks, sdf.parse("00:05:00").getTime());
-        }
-        catch (ParseException e) {
-            e.printStackTrace();
+    private class RoutineTaskAdapter extends CursorAdapter {
+        public RoutineTaskAdapter(Context context, Cursor c, int flags) {
+            super(context, c, flags);
         }
 
+        @Override
+        public View newView(Context context, Cursor cursor, ViewGroup parent) {
+            return LayoutInflater.from(context).inflate(R.layout.activity_routine_task_lv, parent, false);
+        }
 
-        
-        return routine;
+        @Override
+        public void bindView(View view, Context context, Cursor cursor) {
+            TextView taskTitleTV = (TextView) view.findViewById(R.id.task_title_lv);
+            TextView taskDescriptionTV = (TextView) view.findViewById(R.id.task_description_lv);
+            TextView taskDurationTV = (TextView) view.findViewById(R.id.task_duration_lv);
+            // Populate the data into the template view using the data object
+
+            String taskNm = cursor.getString(cursor.getColumnIndexOrThrow("task_nm"));
+            String taskDesc = cursor.getString(cursor.getColumnIndexOrThrow("task_desc"));
+            Integer taskDuration = cursor.getInt(cursor.getColumnIndexOrThrow("duration_ms"));
+
+            RoutineTask rt = new RoutineTask(taskNm, taskDesc, taskDuration);
+
+            taskTitleTV.setText(rt.getTitle());
+            taskDescriptionTV.setText(rt.getDescription());
+            taskDurationTV.setText(rt.getDurationString());
+        }
     }
 
-//    private class RoutineTaskAdapter extends ArrayAdapter<RoutineTask> {
-//
-//
-//
-//        private ArrayList<RoutineTasks>
-//
-//        public RoutineTaskAdapter(Context context, ArrayList<RoutineTask> routineTasks) {
-//            super(context, 0, routineTasks);
-//            this.routineTasks = routineTasks;
-//        }
-//
-//        public ArrayList<RoutineTask> getRoutineTasks(){ return routineTasks;}
-//
-//        @Override
-//        public View getView(int position, View convertView, ViewGroup parent) {
-//            // Get the data item for this position
-//            RoutineTask rt = getItem(position);
-//            // Check if an existing view is being reused, otherwise inflate the view
-//            if (convertView == null) {
-//                convertView = LayoutInflater.from(getContext()).
-//                        inflate(R.layout.activity_routine_task_lv, parent, false);
-//            }
-//            // Lookup view for data population
-//            TextView taskTtile = (TextView) convertView.findViewById(R.id.task_title_lv);
-//            TextView taskDescription = (TextView) convertView.findViewById(R.id.task_description_lv);
-//            TextView taskDuration = (TextView) convertView.findViewById(R.id.task_duration_lv);
-//            // Populate the data into the template view using the data object
-//            taskTtile.setText(rt.getTitle());
-//            taskDescription.setText(rt.getDescription());
-//            taskDuration.setText(rt.getDurationString());
-//            // Return the completed view to render on screen
-//            return convertView;
-//        }
-//    }
 
 }
