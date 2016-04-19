@@ -10,16 +10,35 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class MorningRoutineDbHelper extends SQLiteOpenHelper {
 
+    private static MorningRoutineDbHelper instance;
+
+    public static synchronized MorningRoutineDbHelper getHelper(Context context){
+        if(instance == null){
+            instance = new MorningRoutineDbHelper(context);
+        }
+
+        return instance;
+    }
+
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "MorningRoutine.db";
 
     private static final String TEXT_TYPE = " TEXT";
+    private static final String INTEGER_TYPE = " INTEGER";
     private static final String COMMA_SEP = ",";
-    private static final String SQL_CREATE_ENTRIES =
+    private static final String SQL_CREATE_ROUTINE_TABLE =
             "CREATE TABLE " + RoutineContract.Routine.TABLE_NAME + "(" +
                     RoutineContract.Routine._ID + " INTEGER PRIMARY KEY," +
-                    RoutineContract.Routine.COLUMN_NAME_TITLE + TEXT_TYPE + COMMA_SEP +
-                    RoutineContract.Routine.COLUMN_NAME_DESCRIPTION + TEXT_TYPE + ")";
+                    RoutineContract.Routine.COLUMN_NAME_NM + TEXT_TYPE + COMMA_SEP +
+                    RoutineContract.Routine.COLUMN_NAME_DESC + TEXT_TYPE + ")";
+
+    private static final String SQL_CREATE_ROUTINE_TASK_TABLE =
+            "CREATE TABLE " + RoutineContract.RoutineTask.TABLE_NAME + "(" +
+                    RoutineContract.RoutineTask._ID + " INTEGER PRIMARY KEY," +
+                    RoutineContract.RoutineTask.COLUMN_NAME_ROUTINE_NAME + TEXT_TYPE + COMMA_SEP +
+                    RoutineContract.RoutineTask.COLUMN_NAME_TITLE + TEXT_TYPE + COMMA_SEP +
+                    RoutineContract.RoutineTask.COLUMN_NAME_DESC + TEXT_TYPE + COMMA_SEP +
+                    RoutineContract.RoutineTask.COLUMN_NAME_DURATION_MS + INTEGER_TYPE + ")";
 
 
 
@@ -29,15 +48,15 @@ public class MorningRoutineDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(SQL_CREATE_ENTRIES);
+        db.execSQL(SQL_CREATE_ROUTINE_TABLE);
+        db.execSQL(SQL_CREATE_ROUTINE_TASK_TABLE);
         insertDefaultRoutines(db);
     }
 
     private long insertDefaultRoutines(SQLiteDatabase db){
-        // Create a new map of values, where column names are the keys
         ContentValues values = new ContentValues();
-        values.put(RoutineContract.Routine.COLUMN_NAME_TITLE, "STANDARD ROUTINE");
-        values.put(RoutineContract.Routine.COLUMN_NAME_DESCRIPTION, "Most common daily routine");
+        values.put(RoutineContract.Routine.COLUMN_NAME_NM, "STANDARD ROUTINE");
+        values.put(RoutineContract.Routine.COLUMN_NAME_DESC, "Most common daily routine");
 
         // Insert the new row, returning the primary key value of the new row
         long newRowId;
@@ -45,6 +64,29 @@ public class MorningRoutineDbHelper extends SQLiteOpenHelper {
                 RoutineContract.Routine.TABLE_NAME,
                 null,
                 values);
+
+        ContentValues taskValues = new ContentValues();
+        taskValues.put(RoutineContract.RoutineTask.COLUMN_NAME_ROUTINE_NAME, "STANDARD ROUTINE");
+        taskValues.put(RoutineContract.RoutineTask.COLUMN_NAME_TITLE, "Alexander Technique");
+        taskValues.put(RoutineContract.RoutineTask.COLUMN_NAME_DESC, "Lie on yo stomach and move yo legs DAWG");
+        taskValues.put(RoutineContract.RoutineTask.COLUMN_NAME_DURATION_MS, 30000);
+
+        newRowId = db.insert(
+                RoutineContract.RoutineTask.TABLE_NAME,
+                null,
+                taskValues);
+
+        taskValues = new ContentValues();
+        taskValues.put(RoutineContract.RoutineTask.COLUMN_NAME_ROUTINE_NAME, "STANDARD ROUTINE");
+        taskValues.put(RoutineContract.RoutineTask.COLUMN_NAME_TITLE, "Integral Bodywork");
+        taskValues.put(RoutineContract.RoutineTask.COLUMN_NAME_DESC, "Open up the integral bodywork module!");
+        taskValues.put(RoutineContract.RoutineTask.COLUMN_NAME_DURATION_MS, 3000);
+
+        newRowId = db.insert(
+                RoutineContract.RoutineTask.TABLE_NAME,
+                null,
+                taskValues);
+
 
         return newRowId;
     }

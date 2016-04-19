@@ -11,9 +11,16 @@ public class RoutineContract {
 
     public static abstract class Routine implements BaseColumns {
         public static final String TABLE_NAME = "Routine";
-        public static final String COLUMN_NAME_ROUTINE_ID = "routineid";
-        public static final String COLUMN_NAME_TITLE = "title";
-        public static final String COLUMN_NAME_DESCRIPTION = "description";
+        public static final String COLUMN_NAME_NM = "routine_nm";
+        public static final String COLUMN_NAME_DESC = "routine_desc";
+    }
+
+    public static abstract class RoutineTask implements BaseColumns{
+        public static final String TABLE_NAME = "RoutineTask";
+        public static final String COLUMN_NAME_ROUTINE_NAME = "routine_nm";
+        public static final String COLUMN_NAME_TITLE = "task_nm";
+        public static final String COLUMN_NAME_DESC = "task_desc";
+        public static final String COLUMN_NAME_DURATION_MS = "duration_ms";
     }
 
 }

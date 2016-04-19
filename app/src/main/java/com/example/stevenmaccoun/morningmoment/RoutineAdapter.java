@@ -26,8 +26,8 @@ public class RoutineAdapter extends CursorAdapter {
         TextView tvTitle = (TextView) view.findViewById(R.id.title);
         TextView tvDescription = (TextView) view.findViewById(R.id.description);
 
-        String title = cursor.getString(cursor.getColumnIndexOrThrow("title"));
-        String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
+        String title = cursor.getString(cursor.getColumnIndexOrThrow("routine_nm"));
+        String description = cursor.getString(cursor.getColumnIndexOrThrow("routine_desc"));
 
         tvTitle.setText(title);
         tvDescription.setText(description);

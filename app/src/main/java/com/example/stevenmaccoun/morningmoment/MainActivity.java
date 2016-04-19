@@ -28,7 +28,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mDbHelper = new MorningRoutineDbHelper(getApplicationContext());
+        this.deleteDatabase("MorningRoutine.db");
+        mDbHelper = MorningRoutineDbHelper.getHelper(getApplicationContext());
         db = mDbHelper.getWritableDatabase();
 
         popularLV = (ListView) findViewById(R.id.popular);
@@ -49,10 +50,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                String routineName = popularLV.getItemAtPosition(position).toString();
+                Cursor c = (Cursor) popularLV.getItemAtPosition(position);
+                String routineName = c.getString(1);
 
                 Intent i = new Intent(MainActivity.this, RoutineActivity.class);
-                i.putExtra("title", routineName);
+                i.putExtra("routine_nm", routineName);
                 startActivity(i);
             }
         });

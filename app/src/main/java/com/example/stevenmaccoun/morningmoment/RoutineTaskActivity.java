@@ -44,7 +44,7 @@ public class RoutineTaskActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        timer = new RoutineTaskCountdownTimer(startTimeMillis, 1000);
+        timer = new RoutineTaskCountdownTimer(startTimeMillis, 3);
         timer.start();
 
     }
