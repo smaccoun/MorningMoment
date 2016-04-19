@@ -17,6 +17,9 @@ import android.widget.Toast;
 import com.example.stevenmaccoun.morningmoment.db.MorningRoutineDbHelper;
 import com.example.stevenmaccoun.morningmoment.db.RoutineContract;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public class MainActivity extends AppCompatActivity {
 
     private ListView popularLV;
@@ -33,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
         db = mDbHelper.getWritableDatabase();
 
         popularLV = (ListView) findViewById(R.id.popular);
+
 
         initializePopularLV();
 

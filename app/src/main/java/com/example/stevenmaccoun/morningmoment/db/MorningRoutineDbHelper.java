@@ -5,6 +5,10 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.example.stevenmaccoun.morningmoment.RoutineTask;
+
+import java.util.ArrayList;
+
 /**
  * Created by stevenmaccoun on 4/18/16.
  */
