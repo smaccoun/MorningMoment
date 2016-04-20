@@ -12,13 +12,13 @@ public class RoutineTask {
 
     private String title;
     private String description;
-    private long durationSeconds;
+    private long durationMillis;
     private static final SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss", Locale.US);
 
     public RoutineTask(String title, String description, long durationSeconds){
         this.title = title;
         this.description = description;
-        this.durationSeconds = durationSeconds;
+        this.durationMillis = durationSeconds;
 
         sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
     }
@@ -36,12 +36,16 @@ public class RoutineTask {
         this.description = description;
     }
 
-    public void setDurationSeconds(long durationSeconds) {
-        this.durationSeconds = durationSeconds;
+    public void setDurationMillis(long durationMillis) {
+        this.durationMillis = durationMillis;
     }
 
     public String getDurationString(){
-        return sdf.format(new Date(durationSeconds));
+        return sdf.format(new Date(durationMillis));
+    }
+
+    public long getDurationMillis(){
+        return durationMillis;
     }
 
 

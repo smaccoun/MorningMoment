@@ -51,6 +51,7 @@ public class RoutineActivity extends AppCompatActivity {
                 i.putExtra("title", currentTask.getTitle());
                 i.putExtra("description", currentTask.getDescription());
                 i.putExtra("duration", currentTask.getDurationString());
+                i.putExtra("durationMillis", currentTask.getDurationMillis());
                 startActivity(i);
 
             }
