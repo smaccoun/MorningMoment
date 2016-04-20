@@ -73,7 +73,7 @@ public class MorningRoutineDbHelper extends SQLiteOpenHelper {
         taskValues.put(RoutineContract.RoutineTask.COLUMN_NAME_ROUTINE_NAME, "STANDARD ROUTINE");
         taskValues.put(RoutineContract.RoutineTask.COLUMN_NAME_TITLE, "Alexander Technique");
         taskValues.put(RoutineContract.RoutineTask.COLUMN_NAME_DESC, "Lie on yo stomach and move yo legs DAWG");
-        taskValues.put(RoutineContract.RoutineTask.COLUMN_NAME_DURATION_MS, 30000);
+        taskValues.put(RoutineContract.RoutineTask.COLUMN_NAME_DURATION_MS, 3000);
 
         newRowId = db.insert(
                 RoutineContract.RoutineTask.TABLE_NAME,

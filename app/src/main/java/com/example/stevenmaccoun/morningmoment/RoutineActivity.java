@@ -15,6 +15,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.stevenmaccoun.morningmoment.db.MorningRoutineDbHelper;
+import com.example.stevenmaccoun.morningmoment.db.RoutineContract;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,6 +27,7 @@ public class RoutineActivity extends AppCompatActivity {
     private ListView routineTasksLV;
     private Button beginRoutineB;
     private ArrayList<RoutineTask> routineTasks;
+    private String routineName;
 
 
     @Override
@@ -35,6 +37,7 @@ public class RoutineActivity extends AppCompatActivity {
 
 
         routineTasksLV = (ListView) findViewById(R.id.routine_items);
+        routineName = '"' + getIntent().getStringExtra("routine_nm") + '"';
 
         loadRoutineTasks();
         populateRoutineTasksLV();
@@ -45,8 +48,8 @@ public class RoutineActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 routineTasksLV.setItemChecked(1, true);
-                RoutineTaskManager rtm = createRoutineTaskManager();
-                RoutineTask currentTask = rtm.getCurrentTask();
+                RoutineTaskManager.getInstance().initializeRoutine(routineName, routineTasks);
+                RoutineTask currentTask = RoutineTaskManager.getInstance().getCurrentTask();
                 Intent i = new Intent(RoutineActivity.this, RoutineTaskActivity.class);
                 i.putExtra("title", currentTask.getTitle());
                 i.putExtra("description", currentTask.getDescription());
@@ -58,30 +61,16 @@ public class RoutineActivity extends AppCompatActivity {
         });
     }
 
-    private RoutineTaskManager createRoutineTaskManager(){
-
-        HashMap<Integer, RoutineTask> routineTaskHashMap = new HashMap<Integer, RoutineTask>();
-
-        for(int i=0; i < routineTasks.size(); ++i){
-            routineTaskHashMap.put(i, routineTasks.get(i));
-        }
-
-        RoutineTaskManager rtm = new RoutineTaskManager(getIntent().getStringExtra("routine_nm"),
-                routineTaskHashMap);
-
-        return rtm;
-    }
 
     private ArrayList<RoutineTask> loadRoutineTasks() {
 
-        String routineNm = '"' + getIntent().getStringExtra("routine_nm") + '"';
 
         String rtView =
                 " SELECT rt._id, rt.task_nm, rt.task_desc, rt.duration_ms " +
                         " FROM RoutineTask rt " +
                         " INNER JOIN Routine r " +
                         " ON rt.routine_nm = r.routine_nm" +
-                        " WHERE r.routine_nm = " + routineNm;
+                        " WHERE r.routine_nm = " + routineName;
 
         Cursor c = MorningRoutineDbHelper
                 .getHelper(getApplicationContext())
@@ -116,6 +105,8 @@ public class RoutineActivity extends AppCompatActivity {
         routineTasksLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                RoutineTaskManager.getInstance().initializeRoutine(routineName, routineTasks);
 
                 RoutineTask rt = (RoutineTask) parent.getItemAtPosition(position);
                 String title = rt.getTitle();

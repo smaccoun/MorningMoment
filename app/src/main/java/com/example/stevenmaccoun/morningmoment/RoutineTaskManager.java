@@ -1,5 +1,7 @@
 package com.example.stevenmaccoun.morningmoment;
 
+import android.app.Application;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -8,15 +10,29 @@ import java.util.HashMap;
  */
 public class RoutineTaskManager {
 
-    private String routineName;
-    private HashMap<Integer, RoutineTask> routineActivities;
-    private Integer currentTaskNumber;
+    private static RoutineTaskManager instance = null;
 
-    public RoutineTaskManager(String routineName, HashMap<Integer, RoutineTask> routineActivities)
+    private String routineName;
+    private ArrayList<RoutineTask> routineActivities;
+    private Integer currentTaskNumber = 0;
+
+    private RoutineTaskManager(){}
+
+    public static RoutineTaskManager getInstance(){
+        if(instance == null){
+            instance = new RoutineTaskManager();
+        }
+
+        return instance;
+    }
+
+    public RoutineTaskManager initializeRoutine(String routineName, ArrayList<RoutineTask> routineActivities)
     {
-        this.routineName = new String(routineName);
-        this.routineActivities = new HashMap<Integer, RoutineTask>(routineActivities);
-        this.currentTaskNumber = new Integer(0);
+        instance.routineName = new String(routineName);
+        instance.routineActivities = new ArrayList<RoutineTask>(routineActivities);
+        instance.currentTaskNumber = new Integer(0);
+
+        return instance;
     }
 
     public Integer getCurrentTaskNumber() {
@@ -25,6 +41,10 @@ public class RoutineTaskManager {
 
     public Integer incrementCurrentTaskNumber(){
         currentTaskNumber += 1;
+        if(currentTaskNumber >= instance.routineActivities.size()){
+            return -1;
+        }
+
         return currentTaskNumber;
     }
 

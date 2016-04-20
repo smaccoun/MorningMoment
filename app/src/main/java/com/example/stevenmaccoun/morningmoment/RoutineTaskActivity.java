@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.stevenmaccoun.morningmoment.utilities.DateFormatHandler;
 
@@ -32,14 +34,19 @@ public class RoutineTaskActivity extends AppCompatActivity {
         durationTV = (TextView) findViewById(R.id.task_duration);
 
         Intent i = getIntent();
-        String routineNm = i.getStringExtra("title");
+        String taskNm = i.getStringExtra("title");
         String routineDesc = i.getStringExtra("description");
         String duration = i.getStringExtra("duration");
 
-        titleTV.setText(routineNm);
+        titleTV.setText(taskNm);
         descriptionTV.setText(routineDesc);
         durationTV.setText(duration);
 
+        launchTimer(duration);
+
+    }
+
+    private void launchTimer(String duration){
         long millisToFinish = 0;
         try {
             millisToFinish = DateFormatHandler.getInstance().toLong(duration);
@@ -49,7 +56,6 @@ public class RoutineTaskActivity extends AppCompatActivity {
 
         timer = new RoutineTaskCountdownTimer(millisToFinish, 1000);
         timer.start();
-
     }
 
     @Override
@@ -76,7 +82,18 @@ public class RoutineTaskActivity extends AppCompatActivity {
 
         @Override
         public void onFinish() {
-            this.cancel();
+            int taskNo = RoutineTaskManager.getInstance().incrementCurrentTaskNumber();
+            if(taskNo < 0){
+                this.cancel();
+                Toast.makeText(getApplicationContext(), "CONGRATS YOU HAVE FINISHED YOUR ROUTINE!!!", Toast.LENGTH_LONG);
+                return;
+            }
+
+            RoutineTask rt = RoutineTaskManager.getInstance().getCurrentTask();
+            titleTV.setText(rt.getTitle());
+            descriptionTV.setText(rt.getDescription());
+            durationTV.setText(rt.getDurationString());
+            this.start();
         }
 
     }
