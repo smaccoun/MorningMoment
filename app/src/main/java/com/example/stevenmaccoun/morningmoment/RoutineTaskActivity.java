@@ -1,8 +1,8 @@
 package com.example.stevenmaccoun.morningmoment;
 
+import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.widget.TextView;
 
 import com.example.stevenmaccoun.morningmoment.utilities.DateFormatHandler;

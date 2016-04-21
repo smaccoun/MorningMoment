@@ -1,13 +1,5 @@
 package com.example.stevenmaccoun.morningmoment;
 
-import android.content.ContentValues;
-import android.database.sqlite.SQLiteDatabase;
-
-import com.example.stevenmaccoun.morningmoment.db.MorningRoutineDbHelper;
-import com.example.stevenmaccoun.morningmoment.db.RoutineContract;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;

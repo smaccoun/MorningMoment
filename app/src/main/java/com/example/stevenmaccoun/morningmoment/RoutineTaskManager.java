@@ -1,13 +1,11 @@
 package com.example.stevenmaccoun.morningmoment;
 
-import android.app.Application;
 import android.content.Context;
 import android.database.Cursor;
 
 import com.example.stevenmaccoun.morningmoment.db.MorningRoutineDbHelper;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.TreeMap;
 
 /**
