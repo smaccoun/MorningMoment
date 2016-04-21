@@ -44,7 +44,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void initializePopularLV(){
 
-        Cursor routineLVCursor = db.rawQuery("SELECT * FROM Routine", null); //TODO: Change * to column names
+        Cursor routineLVCursor =
+                db.rawQuery("SELECT _id, routine_nm, routine_desc" +
+                            " FROM Routine", null);
         RoutineAdapter routineAdapter = new RoutineAdapter(this, routineLVCursor, 0);
 
         popularLV.setAdapter(routineAdapter);
@@ -54,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 Cursor c = (Cursor) popularLV.getItemAtPosition(position);
-                String routineNm = c.getString(1); //TODO: Use getcolumnindex
+                String routineNm = c.getString(c.getColumnIndexOrThrow("routine_nm"));
                 RoutineTaskManager.getInstance()
                         .initializeRoutine(getApplicationContext(), routineNm);
 

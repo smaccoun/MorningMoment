@@ -2,25 +2,17 @@ package com.example.stevenmaccoun.morningmoment;
 
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.stevenmaccoun.morningmoment.db.MorningRoutineDbHelper;
-import com.example.stevenmaccoun.morningmoment.db.RoutineContract;
-
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Set;
-import java.util.TreeMap;
 
 public class RoutineActivity extends AppCompatActivity {
 
@@ -51,10 +43,6 @@ public class RoutineActivity extends AppCompatActivity {
                 RoutineTaskManager.getInstance().setCurrentTaskToBeginning();
                 RoutineTask currentTask = RoutineTaskManager.getInstance().getCurrentTask();
                 Intent i = new Intent(RoutineActivity.this, RoutineTaskActivity.class);
-                i.putExtra("title", currentTask.getTitle());
-                i.putExtra("description", currentTask.getDescription());
-                i.putExtra("duration", currentTask.getDurationString());
-                i.putExtra("durationMillis", currentTask.getDurationMillis());
                 startActivity(i);
 
             }
@@ -69,23 +57,6 @@ public class RoutineActivity extends AppCompatActivity {
         ArrayList<RoutineTask> routineTasks = new ArrayList<>(routine.getRoutineTasks());
         RoutineTaskAdapter routineTaskAdapter = new RoutineTaskAdapter(this, routineTasks);
         routineTasksLV.setAdapter(routineTaskAdapter);
-
-        routineTasksLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                RoutineTask rt = (RoutineTask) parent.getItemAtPosition(position);
-                String title = rt.getTitle();
-                String description = rt.getDescription();
-                String duration = rt.getDurationString();
-
-                Intent i = new Intent(RoutineActivity.this, RoutineTaskActivity.class);
-                i.putExtra("title", title);
-                i.putExtra("description", description);
-                i.putExtra("duration", duration);
-                startActivity(i);
-            }
-        });
     }
 
     public class RoutineTaskAdapter extends ArrayAdapter<RoutineTask> {
@@ -103,8 +74,8 @@ public class RoutineActivity extends AppCompatActivity {
                         .inflate(R.layout.activity_routine_task_lv, parent, false);
             }
             // Lookup view for data population
-            TextView tvName = (TextView) convertView.findViewById(R.id.task_title);
-            TextView tvDesc = (TextView) convertView.findViewById(R.id.task_description);
+            TextView tvName = (TextView) convertView.findViewById(R.id.task_nm);
+            TextView tvDesc = (TextView) convertView.findViewById(R.id.task_desc);
             TextView tvDuration = (TextView) convertView.findViewById(R.id.task_duration);
             // Populate the data into the template view using the data object
             tvName.setText(routineTask.getTitle());

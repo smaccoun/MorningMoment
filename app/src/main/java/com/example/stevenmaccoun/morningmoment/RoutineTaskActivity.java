@@ -1,12 +1,9 @@
 package com.example.stevenmaccoun.morningmoment;
 
-import android.content.Intent;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.stevenmaccoun.morningmoment.utilities.DateFormatHandler;
 
@@ -17,9 +14,9 @@ import java.util.TimeZone;
 
 public class RoutineTaskActivity extends AppCompatActivity {
 
-    private TextView titleTV;
-    private TextView descriptionTV;
-    private TextView durationTV;
+    private TextView tvTaskNm;
+    private TextView tvTaskDesc;
+    private TextView tvDuration;
 
     private RoutineTaskCountdownTimer timer;
 
@@ -33,18 +30,18 @@ public class RoutineTaskActivity extends AppCompatActivity {
     }
 
     private void initialize(){
-        titleTV = (TextView) findViewById(R.id.task_title);
-        descriptionTV = (TextView) findViewById(R.id.task_description);
-        durationTV = (TextView) findViewById(R.id.task_duration);
+        tvTaskNm = (TextView) findViewById(R.id.task_nm);
+        tvTaskDesc = (TextView) findViewById(R.id.task_desc);
+        tvDuration = (TextView) findViewById(R.id.task_duration);
 
         RoutineTask currentTask = RoutineTaskManager.getInstance().getCurrentTask();
         String taskNm = currentTask.getTitle();
         String routineDesc = currentTask.getDescription();
         String duration = currentTask.getDurationString();
 
-        titleTV.setText(taskNm);
-        descriptionTV.setText(routineDesc);
-        durationTV.setText(duration);
+        tvTaskNm.setText(taskNm);
+        tvTaskDesc.setText(routineDesc);
+        tvDuration.setText(duration);
 
         launchTimer(duration);
     }
@@ -85,7 +82,7 @@ public class RoutineTaskActivity extends AppCompatActivity {
 
         @Override
         public void onTick(long millisUntilFinished) {
-            durationTV.setText(sdf.format(millisUntilFinished));
+            tvDuration.setText(sdf.format(millisUntilFinished));
         }
 
         @Override
