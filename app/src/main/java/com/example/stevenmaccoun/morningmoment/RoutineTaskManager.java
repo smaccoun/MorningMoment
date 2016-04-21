@@ -1,9 +1,14 @@
 package com.example.stevenmaccoun.morningmoment;
 
 import android.app.Application;
+import android.content.Context;
+import android.database.Cursor;
+
+import com.example.stevenmaccoun.morningmoment.db.MorningRoutineDbHelper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.TreeMap;
 
 /**
  * Created by stevenmaccoun on 4/14/16.
@@ -12,9 +17,8 @@ public class RoutineTaskManager {
 
     private static RoutineTaskManager instance = null;
 
-    private String routineName;
-    private ArrayList<RoutineTask> routineActivities;
     private Integer currentTaskNumber = 0;
+    private Routine currentRoutine = null;
 
     private RoutineTaskManager(){}
 
@@ -26,13 +30,58 @@ public class RoutineTaskManager {
         return instance;
     }
 
-    public RoutineTaskManager initializeRoutine(String routineName, ArrayList<RoutineTask> routineActivities)
+    public RoutineTaskManager initializeRoutine(Context context, String routineNm)
     {
-        instance.routineName = new String(routineName);
-        instance.routineActivities = new ArrayList<RoutineTask>(routineActivities);
-        instance.currentTaskNumber = new Integer(0);
+        instance.currentRoutine = loadRoutine(context, routineNm);
+        instance.currentTaskNumber = 0;
 
         return instance;
+    }
+
+    public int setCurrentTaskToBeginning(){
+        instance.currentTaskNumber = 0;
+        return currentTaskNumber;
+    }
+
+
+    private Routine loadRoutine(Context context, String routineNm){
+
+        String qRoutineNm = "\"" + routineNm + "\"";
+        ArrayList<RoutineTask> routineTasks;
+
+        String rtView =
+                " SELECT rt._id, rt.task_nm, rt.task_desc, rt.duration_ms " +
+                        " FROM RoutineTask rt " +
+                        " INNER JOIN Routine r " +
+                        " ON rt.routine_nm = r.routine_nm" +
+                        " WHERE r.routine_nm = " + qRoutineNm;
+
+        Cursor c = MorningRoutineDbHelper.getHelper(context)
+                .getWritableDatabase().rawQuery(rtView, null);
+
+        TreeMap<Integer, RoutineTask> posRoutineTasks = new TreeMap<>();
+
+        try
+        {
+            while (c.moveToNext()) {
+                Integer pos = c.getInt(c.getColumnIndexOrThrow("_id"));
+                String taskNm = c.getString(c.getColumnIndexOrThrow("task_nm"));
+                String taskDesc = c.getString(c.getColumnIndexOrThrow("task_desc"));
+                Integer taskDuration = c.getInt(c.getColumnIndexOrThrow("duration_ms"));
+                posRoutineTasks.put(pos, new RoutineTask(taskNm, taskDesc, taskDuration));
+            }
+        } catch (Exception e){
+            c.close();
+        }
+
+        routineTasks = new ArrayList<>(posRoutineTasks.values());
+        currentRoutine = new Routine(routineNm, routineTasks, 30000);
+
+        return currentRoutine;
+    }
+
+    public Routine getCurrentRoutine(){
+        return currentRoutine;
     }
 
     public Integer getCurrentTaskNumber() {
@@ -41,7 +90,7 @@ public class RoutineTaskManager {
 
     public Integer incrementCurrentTaskNumber(){
         currentTaskNumber += 1;
-        if(currentTaskNumber >= instance.routineActivities.size()){
+        if(currentTaskNumber >= instance.currentRoutine.getRoutineTasks().size()){
             return -1;
         }
 
@@ -49,6 +98,10 @@ public class RoutineTaskManager {
     }
 
     public RoutineTask getCurrentTask(){
-        return routineActivities.get(currentTaskNumber);
+        if(currentTaskNumber >= instance.currentRoutine.getRoutineTasks().size()){
+
+        }
+
+        return instance.currentRoutine.getRoutineTasks().get(currentTaskNumber);
     }
 }

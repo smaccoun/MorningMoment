@@ -29,21 +29,24 @@ public class RoutineTaskActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_routine_task);
 
+        initialize();
+    }
+
+    private void initialize(){
         titleTV = (TextView) findViewById(R.id.task_title);
         descriptionTV = (TextView) findViewById(R.id.task_description);
         durationTV = (TextView) findViewById(R.id.task_duration);
 
-        Intent i = getIntent();
-        String taskNm = i.getStringExtra("title");
-        String routineDesc = i.getStringExtra("description");
-        String duration = i.getStringExtra("duration");
+        RoutineTask currentTask = RoutineTaskManager.getInstance().getCurrentTask();
+        String taskNm = currentTask.getTitle();
+        String routineDesc = currentTask.getDescription();
+        String duration = currentTask.getDurationString();
 
         titleTV.setText(taskNm);
         descriptionTV.setText(routineDesc);
         durationTV.setText(duration);
 
         launchTimer(duration);
-
     }
 
     private void launchTimer(String duration){
@@ -56,6 +59,11 @@ public class RoutineTaskActivity extends AppCompatActivity {
 
         timer = new RoutineTaskCountdownTimer(millisToFinish, 1000);
         timer.start();
+    }
+
+    public void finishRoutine(){
+        timer.cancel();
+        finish();
     }
 
     @Override
@@ -84,16 +92,11 @@ public class RoutineTaskActivity extends AppCompatActivity {
         public void onFinish() {
             int taskNo = RoutineTaskManager.getInstance().incrementCurrentTaskNumber();
             if(taskNo < 0){
-                this.cancel();
-                Toast.makeText(getApplicationContext(), "CONGRATS YOU HAVE FINISHED YOUR ROUTINE!!!", Toast.LENGTH_LONG);
+                finishRoutine();
                 return;
             }
 
-            RoutineTask rt = RoutineTaskManager.getInstance().getCurrentTask();
-            titleTV.setText(rt.getTitle());
-            descriptionTV.setText(rt.getDescription());
-            durationTV.setText(rt.getDurationString());
-            this.start();
+            initialize();
         }
 
     }

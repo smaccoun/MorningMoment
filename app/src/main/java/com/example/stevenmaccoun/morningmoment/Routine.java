@@ -13,7 +13,7 @@ public class Routine {
 
     public Routine(String title, ArrayList<RoutineTask> routineTasks, long durationMillis) {
         this.title = title;
-        this.routineTasks = routineTasks;
+        this.routineTasks = new ArrayList<>(routineTasks);
         this.durationMillis = durationMillis;
     }
 

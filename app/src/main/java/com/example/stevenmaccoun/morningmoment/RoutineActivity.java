@@ -39,8 +39,8 @@ public class RoutineActivity extends AppCompatActivity {
         routineTasksLV = (ListView) findViewById(R.id.routine_items);
         routineName = '"' + getIntent().getStringExtra("routine_nm") + '"';
 
-        loadRoutineTasks();
-        populateRoutineTasksLV();
+        Routine currentRoutine = RoutineTaskManager.getInstance().getCurrentRoutine();
+        populateRoutineTasksLV(currentRoutine);
 
         beginRoutineB = (Button) findViewById(R.id.begin_routine);
         beginRoutineB.setOnClickListener(new View.OnClickListener() {
@@ -48,7 +48,7 @@ public class RoutineActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 routineTasksLV.setItemChecked(1, true);
-                RoutineTaskManager.getInstance().initializeRoutine(routineName, routineTasks);
+                RoutineTaskManager.getInstance().setCurrentTaskToBeginning();
                 RoutineTask currentTask = RoutineTaskManager.getInstance().getCurrentTask();
                 Intent i = new Intent(RoutineActivity.this, RoutineTaskActivity.class);
                 i.putExtra("title", currentTask.getTitle());
@@ -62,51 +62,17 @@ public class RoutineActivity extends AppCompatActivity {
     }
 
 
-    private ArrayList<RoutineTask> loadRoutineTasks() {
 
 
-        String rtView =
-                " SELECT rt._id, rt.task_nm, rt.task_desc, rt.duration_ms " +
-                        " FROM RoutineTask rt " +
-                        " INNER JOIN Routine r " +
-                        " ON rt.routine_nm = r.routine_nm" +
-                        " WHERE r.routine_nm = " + routineName;
+    private void populateRoutineTasksLV(Routine routine){
 
-        Cursor c = MorningRoutineDbHelper
-                .getHelper(getApplicationContext())
-                .getWritableDatabase().rawQuery(rtView, null);
-
-        TreeMap<Integer, RoutineTask> posRoutineTasks = new TreeMap<>();
-
-        try
-        {
-            while (c.moveToNext()) {
-                Integer pos = c.getInt(c.getColumnIndexOrThrow("_id"));
-                String taskNm = c.getString(c.getColumnIndexOrThrow("task_nm"));
-                String taskDesc = c.getString(c.getColumnIndexOrThrow("task_desc"));
-                Integer taskDuration = c.getInt(c.getColumnIndexOrThrow("duration_ms"));
-                posRoutineTasks.put(pos, new RoutineTask(taskNm, taskDesc, taskDuration));
-            }
-        } catch (Exception e){
-            c.close();
-        }
-
-        routineTasks = new ArrayList<>(posRoutineTasks.values());
-
-        return routineTasks;
-
-    }
-
-    private void populateRoutineTasksLV(){
-
+        ArrayList<RoutineTask> routineTasks = new ArrayList<>(routine.getRoutineTasks());
         RoutineTaskAdapter routineTaskAdapter = new RoutineTaskAdapter(this, routineTasks);
         routineTasksLV.setAdapter(routineTaskAdapter);
 
         routineTasksLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                RoutineTaskManager.getInstance().initializeRoutine(routineName, routineTasks);
 
                 RoutineTask rt = (RoutineTask) parent.getItemAtPosition(position);
                 String title = rt.getTitle();
