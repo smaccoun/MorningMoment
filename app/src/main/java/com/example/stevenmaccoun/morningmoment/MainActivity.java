@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.example.stevenmaccoun.morningmoment.db.MorningRoutineDbHelper;
@@ -14,8 +15,9 @@ import com.example.stevenmaccoun.morningmoment.db.MorningRoutineDbHelper;
 public class MainActivity extends AppCompatActivity {
 
     private ListView popularLV;
-    private MorningRoutineDbHelper mDbHelper;
-    private SQLiteDatabase db;
+    private Button createRoutineB;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,17 +25,34 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         this.deleteDatabase("MorningRoutine.db");
-        mDbHelper = MorningRoutineDbHelper.getHelper(getApplicationContext());
-        db = mDbHelper.getWritableDatabase();
-
-        popularLV = (ListView) findViewById(R.id.popular);
 
         initializePopularLV();
+        initializeCreateRoutineB();
 
     }
 
 
+
+    private void initializeCreateRoutineB(){
+        createRoutineB = (Button) findViewById(R.id.create_routine_b);
+
+        createRoutineB.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, CreateRoutineActivity.class);
+                startActivity(i);
+            }
+        });
+    }
+
+
     private void initializePopularLV(){
+
+        MorningRoutineDbHelper mDbHelper = MorningRoutineDbHelper.getHelper(getApplicationContext());
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+
+        popularLV = (ListView) findViewById(R.id.popular);
 
         Cursor routineLVCursor =
                 db.rawQuery("SELECT _id, routine_nm, routine_desc" +
@@ -55,6 +74,15 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+
+        db.close();
+    }
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        initializePopularLV();
     }
 
 }

@@ -73,7 +73,7 @@ public class RoutineTaskManager {
         }
 
         routineTasks = new ArrayList<>(posRoutineTasks.values());
-        currentRoutine = new Routine(routineNm, routineTasks, 30000);
+        currentRoutine = new Routine(routineNm, "default", routineTasks, 30000);
 
         return currentRoutine;
     }

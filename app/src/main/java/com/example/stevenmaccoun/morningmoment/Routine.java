@@ -7,12 +7,19 @@ import java.util.ArrayList;
  */
 public class Routine {
 
-    private String title;
+    private String name;
+    private String description;
     private ArrayList<RoutineTask> routineTasks;
     private long durationMillis;
 
-    public Routine(String title, ArrayList<RoutineTask> routineTasks, long durationMillis) {
-        this.title = title;
+    public String getDescription() {
+        return description;
+    }
+
+    public Routine(String name, String description, ArrayList<RoutineTask> routineTasks, long durationMillis) {
+        this.name = name;
+        this.description = description;
+
         this.routineTasks = new ArrayList<>(routineTasks);
         this.durationMillis = durationMillis;
     }
@@ -31,8 +38,8 @@ public class Routine {
         return false;
     }
 
-    public String getTitle() {
-        return title;
+    public String getName() {
+        return name;
     }
 
     public ArrayList<RoutineTask> getRoutineTasks() {
