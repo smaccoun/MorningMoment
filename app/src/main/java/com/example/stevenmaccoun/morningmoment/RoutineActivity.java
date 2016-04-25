@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -18,8 +19,6 @@ public class RoutineActivity extends AppCompatActivity {
 
     private ListView routineTasksLV;
     private Button beginRoutineB;
-    private ArrayList<RoutineTask> routineTasks;
-    private String routineName;
 
 
     @Override
@@ -27,9 +26,7 @@ public class RoutineActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_routine);
 
-
         routineTasksLV = (ListView) findViewById(R.id.routine_items);
-        routineName = '"' + getIntent().getStringExtra("routine_nm") + '"';
 
         Routine currentRoutine = RoutineTaskManager.getInstance().getCurrentRoutine();
         populateRoutineTasksLV(currentRoutine);
@@ -41,7 +38,6 @@ public class RoutineActivity extends AppCompatActivity {
 
                 routineTasksLV.setItemChecked(1, true);
                 RoutineTaskManager.getInstance().setCurrentTaskToBeginning();
-                RoutineTask currentTask = RoutineTaskManager.getInstance().getCurrentTask();
                 Intent i = new Intent(RoutineActivity.this, RoutineTaskActivity.class);
                 startActivity(i);
 

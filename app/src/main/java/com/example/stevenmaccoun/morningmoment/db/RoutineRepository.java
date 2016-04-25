@@ -39,7 +39,7 @@ public class RoutineRepository implements IRepository<Routine, String> {
 
         values.put("routine_nm", routine.getName());
         values.put("routine_desc", routine.getDescription());
-//        values.put("duration", routine.getDurationMillis());
+        values.put("duration_ms", routine.getDurationText());
 
         boolean success = db.insert(ROUTINE_TABLE_NAME, null, values) > 0;
         db.close();

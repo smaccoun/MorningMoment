@@ -1,5 +1,7 @@
 package com.example.stevenmaccoun.morningmoment;
 
+import com.example.stevenmaccoun.morningmoment.utilities.DateFormatHandler;
+
 import java.util.ArrayList;
 
 /**
@@ -48,6 +50,10 @@ public class Routine {
 
     public long getDurationMillis() {
         return durationMillis;
+    }
+
+    public String getDurationText() {
+        return DateFormatHandler.getInstance().toString(durationMillis);
     }
 
 

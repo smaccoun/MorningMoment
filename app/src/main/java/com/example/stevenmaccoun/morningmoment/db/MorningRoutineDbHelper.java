@@ -30,7 +30,8 @@ public class MorningRoutineDbHelper extends SQLiteOpenHelper {
             "CREATE TABLE " + RoutineContract.Routine.TABLE_NAME + "(" +
                     RoutineContract.Routine._ID + " INTEGER PRIMARY KEY," +
                     RoutineContract.Routine.COLUMN_NAME_NM + TEXT_TYPE + COMMA_SEP +
-                    RoutineContract.Routine.COLUMN_NAME_DESC + TEXT_TYPE + ")";
+                    RoutineContract.Routine.COLUMN_NAME_DESC + TEXT_TYPE + COMMA_SEP +
+                    RoutineContract.Routine.COLUMN_NAME_DURATION + TEXT_TYPE + ")";
 
     private static final String SQL_CREATE_ROUTINE_TASK_TABLE =
             "CREATE TABLE " + RoutineContract.RoutineTask.TABLE_NAME + "(" +
@@ -57,6 +58,7 @@ public class MorningRoutineDbHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(RoutineContract.Routine.COLUMN_NAME_NM, "STANDARD ROUTINE");
         values.put(RoutineContract.Routine.COLUMN_NAME_DESC, "Most common daily routine");
+        values.put(RoutineContract.Routine.COLUMN_NAME_DURATION, "00:05:00");
 
         // Insert the new row, returning the primary key value of the new row
         long newRowId;

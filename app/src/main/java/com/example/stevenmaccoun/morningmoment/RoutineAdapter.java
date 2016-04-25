@@ -25,11 +25,14 @@ public class RoutineAdapter extends CursorAdapter {
     public void bindView(View view, Context context, Cursor cursor) {
         TextView tvTitle = (TextView) view.findViewById(R.id.title);
         TextView tvDescription = (TextView) view.findViewById(R.id.description);
+        TextView tvDuration = (TextView) view.findViewById(R.id.duration);
 
         String title = cursor.getString(cursor.getColumnIndexOrThrow("routine_nm"));
         String description = cursor.getString(cursor.getColumnIndexOrThrow("routine_desc"));
+        String duration = cursor.getString(cursor.getColumnIndexOrThrow("duration_ms"));
 
         tvTitle.setText(title);
         tvDescription.setText(description);
+        tvDuration.setText(duration);
     }
 }

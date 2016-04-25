@@ -13,6 +13,7 @@ public class RoutineContract {
         public static final String TABLE_NAME = "Routine";
         public static final String COLUMN_NAME_NM = "routine_nm";
         public static final String COLUMN_NAME_DESC = "routine_desc";
+        public static final String COLUMN_NAME_DURATION = "duration_ms";
     }
 
     public static abstract class RoutineTask implements BaseColumns{

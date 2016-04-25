@@ -42,12 +42,14 @@ public class CreateRoutineActivity extends AppCompatActivity {
         RoutineRepository rr = new RoutineRepository(getApplicationContext());
         String name = routineNmTV.getText().toString();
         String description = routineDescTV.getText().toString();
+
         long duration = 0;
         try {
             duration = DateFormatHandler.getInstance().toLong(routineDurationTV.getText().toString());
         } catch (ParseException e) {
             e.printStackTrace();
         }
+
         Routine routine = new Routine(name, description, new ArrayList<RoutineTask>(), duration);
         boolean success = rr.Save(routine);
 
