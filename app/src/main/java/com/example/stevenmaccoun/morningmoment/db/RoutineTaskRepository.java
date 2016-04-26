@@ -2,8 +2,10 @@ package com.example.stevenmaccoun.morningmoment.db;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.example.stevenmaccoun.morningmoment.Routine;
 import com.example.stevenmaccoun.morningmoment.RoutineTask;
 
 import java.util.ArrayList;
@@ -19,8 +21,32 @@ public class RoutineTaskRepository implements IRepository<RoutineTask, String> {
        this.context = context;
     }
 
+    public ArrayList<RoutineTask> GetAll(Context c) {
+        SQLiteDatabase db = MorningRoutineDbHelper.getHelper(context).getWritableDatabase();
+
+        Cursor cursor =
+                db.rawQuery("SELECT _id, task_nm, task_desc, duration_ms " +
+                        " FROM RoutineTask", null);
+
+        ArrayList<RoutineTask> routineTasks = new ArrayList<>();
+
+        while(cursor.moveToNext()){
+            String name = cursor.getString(cursor.getColumnIndexOrThrow("task_nm"));
+            String description = cursor.getString(cursor.getColumnIndexOrThrow("task_desc"));
+            int duration = cursor.getInt(cursor.getColumnIndexOrThrow("duration_ms"));
+
+            RoutineTask rt = new RoutineTask(name, description, duration);
+
+            routineTasks.add(rt);
+        }
+
+        return routineTasks;
+    }
+
+
+
     @Override
-    public ArrayList<RoutineTask> GetAll(String s) {
+    public ArrayList<RoutineTask> GetAll() {
         return null;
     }
 
@@ -35,14 +61,45 @@ public class RoutineTaskRepository implements IRepository<RoutineTask, String> {
 
         ContentValues values = new ContentValues();
 
-        values.put("routine_nm", task.getTitle());
-        values.put("routine_desc", task.getDescription());
+        values.put("task_nm", task.getTitle());
+        values.put("task_desc", task.getDescription());
         values.put("duration_ms", task.getDurationString());
 
         boolean success = db.insert("RoutineTask", null, values) > 0;
         db.close();
 
         return success;
+    }
+
+    public static boolean Save(SQLiteDatabase db, Routine routine) {
+
+        ContentValues values = new ContentValues();
+        boolean success = true;
+
+        for(RoutineTask task : routine.getRoutineTasks()){
+            if (doesTaskExist(db, task.getTitle())) {
+                continue;
+            }
+            values.put("task_nm", task.getTitle());
+            values.put("task_desc", task.getDescription());
+            values.put("duration_ms", task.getDurationString());
+
+            success = success & (db.insert("RoutineTask", null, values) > 0);
+        }
+
+        return success;
+    }
+
+    private static boolean doesTaskExist(SQLiteDatabase db, String taskNm){
+        Cursor c = null;
+
+        String query = "select count(*) from RoutineTask WHERE task_nm = ?";
+        c = db.rawQuery(query, new String[] {taskNm});
+        if (c.moveToFirst()) {
+            return c.getInt(0) > 0;
+        }
+        return false;
+
     }
 
     @Override

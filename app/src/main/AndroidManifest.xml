@@ -16,7 +16,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".RoutineActivity" />
-        <activity android:name=".RoutineTaskLVActivity" />
         <activity android:name=".RoutineTaskActivity" />
         <activity android:name=".CreateRoutineActivity" />
         <activity android:name=".CreateRoutineTaskActivity"></activity>

@@ -41,46 +41,37 @@
         android:layout_height="wrap_content"
         android:id="@+id/desc_entry" />
 
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Duration"
-        android:id="@+id/textView2" />
+        android:text="Tasks"
+        android:id="@+id/current_tasks" />
 
-    <EditText
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/current_tasks_TV" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add From Existing Task"
+        android:id="@+id/view_task_lv" />
+
+    <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="time"
-        android:ems="10"
-        android:id="@+id/duration_entry" />
+        android:id="@+id/existing_tasks_lv"
+        android:visibility="gone" />
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
+    <Button
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal">
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal">
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="View Tasks"
-                android:id="@+id/view_tasks" />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Add Task"
-                android:id="@+id/add_task" />
-        </LinearLayout>
-
-    </LinearLayout>
+        android:text="Create New Task"
+        android:id="@+id/create_task" />
 
     <Button
         android:layout_width="wrap_content"

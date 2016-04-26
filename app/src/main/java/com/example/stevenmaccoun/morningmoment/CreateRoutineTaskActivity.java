@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.stevenmaccoun.morningmoment.db.RoutineTaskRepository;
 import com.example.stevenmaccoun.morningmoment.utilities.DateFormatHandler;
@@ -29,7 +30,7 @@ public class CreateRoutineTaskActivity extends AppCompatActivity {
         tvDesc = (TextView) findViewById(R.id.desc_entry);
         tvDuration = (TextView) findViewById(R.id.duration_entry);
 
-        createTaskB = (Button) findViewById(R.id.add_task);
+        createTaskB = (Button) findViewById(R.id.save);
         createTaskB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -43,6 +44,10 @@ public class CreateRoutineTaskActivity extends AppCompatActivity {
                 }
 
                 RoutineTask rt = new RoutineTask(name, desc, duration);
+                RoutineTaskRepository rtr = new RoutineTaskRepository(getApplicationContext());
+                boolean success = rtr.Save(rt);
+                Toast.makeText(getApplicationContext(), "Task Created", Toast.LENGTH_LONG);
+                finish();
             }
         });
     }

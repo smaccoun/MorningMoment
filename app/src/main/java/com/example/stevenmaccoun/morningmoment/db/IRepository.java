@@ -7,7 +7,7 @@ import java.util.ArrayList;
  */
 public interface IRepository<TYPE, KEY> {
 
-    ArrayList<TYPE> GetAll(KEY key);
+    ArrayList<TYPE> GetAll();
     TYPE GetById(KEY key);
     boolean Save(TYPE obj);
     boolean Update(TYPE obj);

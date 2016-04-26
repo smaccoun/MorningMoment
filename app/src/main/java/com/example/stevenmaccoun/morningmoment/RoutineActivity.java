@@ -48,14 +48,14 @@ public class RoutineActivity extends AppCompatActivity {
 
 
 
-    private void populateRoutineTasksLV(Routine routine){
+    private void populateRoutineTasksLV(Routine routine) {
 
         ArrayList<RoutineTask> routineTasks = new ArrayList<>(routine.getRoutineTasks());
         RoutineTaskAdapter routineTaskAdapter = new RoutineTaskAdapter(this, routineTasks);
         routineTasksLV.setAdapter(routineTaskAdapter);
     }
 
-    public class RoutineTaskAdapter extends ArrayAdapter<RoutineTask> {
+   public class RoutineTaskAdapter extends ArrayAdapter<RoutineTask> {
         public RoutineTaskAdapter(Context context, ArrayList<RoutineTask> routineTasks) {
             super(context, 0, routineTasks);
         }
@@ -81,6 +81,7 @@ public class RoutineActivity extends AppCompatActivity {
             return convertView;
         }
     }
+
 
 
 }
