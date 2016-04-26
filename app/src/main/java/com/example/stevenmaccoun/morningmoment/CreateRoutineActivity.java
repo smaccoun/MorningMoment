@@ -1,5 +1,6 @@
 package com.example.stevenmaccoun.morningmoment;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 public class CreateRoutineActivity extends AppCompatActivity {
 
     private Button saveB;
+    private Button createTaskB;
     private TextView routineNmTV;
     private TextView routineDescTV;
     private TextView routineDurationTV;
@@ -25,6 +27,8 @@ public class CreateRoutineActivity extends AppCompatActivity {
         setContentView(R.layout.activity_create_routine);
 
         saveB = (Button) findViewById(R.id.save);
+        createTaskB = (Button) findViewById(R.id.add_task);
+
         routineNmTV = (TextView) findViewById(R.id.nm_entry);
         routineDescTV = (TextView) findViewById(R.id.desc_entry);
         routineDurationTV = (TextView) findViewById(R.id.duration_entry);
@@ -34,6 +38,15 @@ public class CreateRoutineActivity extends AppCompatActivity {
             public void onClick(View v) {
                 saveRoutine();
                 finish();
+            }
+        });
+
+        createTaskB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(CreateRoutineActivity.this, CreateRoutineTaskActivity.class);
+                i.putExtra("routine_nm", routineNmTV.getText().toString());
+                startActivity(i);
             }
         });
     }

@@ -50,9 +50,9 @@ public class RoutineTaskManager {
         String rtView =
                 " SELECT rt._id, rt.task_nm, rt.task_desc, rt.duration_ms " +
                         " FROM RoutineTask rt " +
-                        " INNER JOIN Routine r " +
-                        " ON rt.routine_nm = r.routine_nm" +
-                        " WHERE r.routine_nm = " + qRoutineNm;
+                        " INNER JOIN RoutineTaskBridge b " +
+                        " ON b.routine_task_nm = rt.task_nm " +
+                        " WHERE b.routine_nm = " + qRoutineNm;
 
         Cursor c = MorningRoutineDbHelper.getHelper(context)
                 .getWritableDatabase().rawQuery(rtView, null);

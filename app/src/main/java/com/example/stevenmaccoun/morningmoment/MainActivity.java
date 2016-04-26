@@ -54,6 +54,9 @@ public class MainActivity extends AppCompatActivity {
 
         popularLV = (ListView) findViewById(R.id.popular);
 
+        /*
+        TODO: Change to using RoutineRepository.getAll and fill an array adapter
+        */
         Cursor routineLVCursor =
                 db.rawQuery("SELECT _id, routine_nm, routine_desc, duration_ms " +
                             " FROM Routine", null);

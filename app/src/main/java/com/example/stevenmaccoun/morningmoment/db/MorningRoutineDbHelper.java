@@ -36,10 +36,15 @@ public class MorningRoutineDbHelper extends SQLiteOpenHelper {
     private static final String SQL_CREATE_ROUTINE_TASK_TABLE =
             "CREATE TABLE " + RoutineContract.RoutineTask.TABLE_NAME + "(" +
                     RoutineContract.RoutineTask._ID + " INTEGER PRIMARY KEY," +
-                    RoutineContract.RoutineTask.COLUMN_NAME_ROUTINE_NAME + TEXT_TYPE + COMMA_SEP +
                     RoutineContract.RoutineTask.COLUMN_NAME_TITLE + TEXT_TYPE + COMMA_SEP +
                     RoutineContract.RoutineTask.COLUMN_NAME_DESC + TEXT_TYPE + COMMA_SEP +
                     RoutineContract.RoutineTask.COLUMN_NAME_DURATION_MS + INTEGER_TYPE + ")";
+
+    private static final String SQL_CREATE_ROUTINE_TASK_BRIDGE_TABLE =
+            "CREATE TABLE " + RoutineContract.RoutineTaskBridge.TABLE_NAME + "(" +
+                    RoutineContract.RoutineTask._ID + " INTEGER PRIMARY KEY," +
+                    RoutineContract.RoutineTaskBridge.COLUMN_NAME_ROUTINE_NM + TEXT_TYPE + COMMA_SEP +
+                    RoutineContract.RoutineTaskBridge.COLUMN_NAME_ROUTINE_TASK_NM + TEXT_TYPE + ")";
 
 
 
@@ -51,6 +56,7 @@ public class MorningRoutineDbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(SQL_CREATE_ROUTINE_TABLE);
         db.execSQL(SQL_CREATE_ROUTINE_TASK_TABLE);
+        db.execSQL(SQL_CREATE_ROUTINE_TASK_BRIDGE_TABLE);
         insertDefaultRoutines(db);
     }
 
@@ -68,7 +74,6 @@ public class MorningRoutineDbHelper extends SQLiteOpenHelper {
                 values);
 
         ContentValues taskValues = new ContentValues();
-        taskValues.put(RoutineContract.RoutineTask.COLUMN_NAME_ROUTINE_NAME, "STANDARD ROUTINE");
         taskValues.put(RoutineContract.RoutineTask.COLUMN_NAME_TITLE, "Alexander Technique");
         taskValues.put(RoutineContract.RoutineTask.COLUMN_NAME_DESC, "Lie on yo stomach and move yo legs DAWG");
         taskValues.put(RoutineContract.RoutineTask.COLUMN_NAME_DURATION_MS, 3000);
@@ -78,8 +83,16 @@ public class MorningRoutineDbHelper extends SQLiteOpenHelper {
                 null,
                 taskValues);
 
+        ContentValues bridgeValues = new ContentValues();
+        bridgeValues.put(RoutineContract.RoutineTaskBridge.COLUMN_NAME_ROUTINE_NM, "STANDARD ROUTINE");
+        bridgeValues.put(RoutineContract.RoutineTaskBridge.COLUMN_NAME_ROUTINE_TASK_NM, "Alexander Technique");
+
+        newRowId = db.insert(
+                RoutineContract.RoutineTaskBridge.TABLE_NAME,
+                null,
+                bridgeValues);
+
         taskValues = new ContentValues();
-        taskValues.put(RoutineContract.RoutineTask.COLUMN_NAME_ROUTINE_NAME, "STANDARD ROUTINE");
         taskValues.put(RoutineContract.RoutineTask.COLUMN_NAME_TITLE, "Integral Bodywork");
         taskValues.put(RoutineContract.RoutineTask.COLUMN_NAME_DESC, "Open up the integral bodywork module!");
         taskValues.put(RoutineContract.RoutineTask.COLUMN_NAME_DURATION_MS, 3000);
@@ -88,6 +101,15 @@ public class MorningRoutineDbHelper extends SQLiteOpenHelper {
                 RoutineContract.RoutineTask.TABLE_NAME,
                 null,
                 taskValues);
+
+        bridgeValues = new ContentValues();
+        bridgeValues.put(RoutineContract.RoutineTaskBridge.COLUMN_NAME_ROUTINE_NM, "STANDARD ROUTINE");
+        bridgeValues.put(RoutineContract.RoutineTaskBridge.COLUMN_NAME_ROUTINE_TASK_NM, "Integral Bodywork");
+
+        newRowId = db.insert(
+                RoutineContract.RoutineTaskBridge.TABLE_NAME,
+                null,
+                bridgeValues);
 
 
         return newRowId;
