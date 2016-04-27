@@ -5,6 +5,8 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.example.stevenmaccoun.morningmoment.utilities.DateFormatHandler;
+
 /**
  * Created by stevenmaccoun on 4/18/16.
  */
@@ -31,7 +33,7 @@ public class MorningRoutineDbHelper extends SQLiteOpenHelper {
                     RoutineContract.Routine._ID + " INTEGER PRIMARY KEY," +
                     RoutineContract.Routine.COLUMN_NAME_NM + " TEXT UNIQUE NOT NULL " + COMMA_SEP +
                     RoutineContract.Routine.COLUMN_NAME_DESC + TEXT_TYPE + COMMA_SEP +
-                    RoutineContract.Routine.COLUMN_NAME_DURATION + TEXT_TYPE + ")";
+                    RoutineContract.Routine.COLUMN_NAME_DURATION_MS + INTEGER_TYPE + ")";
 
     private static final String SQL_CREATE_ROUTINE_TASK_TABLE =
             "CREATE TABLE " + RoutineContract.RoutineTask.TABLE_NAME + "(" +
@@ -44,7 +46,7 @@ public class MorningRoutineDbHelper extends SQLiteOpenHelper {
             "CREATE TABLE " + RoutineContract.RoutineTaskBridge.TABLE_NAME + "(" +
                     RoutineContract.RoutineTask._ID + " INTEGER PRIMARY KEY," +
                     RoutineContract.RoutineTaskBridge.COLUMN_NAME_ROUTINE_NM + TEXT_TYPE + COMMA_SEP +
-                    RoutineContract.RoutineTaskBridge.COLUMN_NAME_ROUTINE_TASK_NM + TEXT_TYPE + ")";
+                    RoutineContract.RoutineTaskBridge.COLUMN_NAME_TASK_NM + TEXT_TYPE + ")";
 
 
 
@@ -64,7 +66,7 @@ public class MorningRoutineDbHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(RoutineContract.Routine.COLUMN_NAME_NM, "STANDARD ROUTINE");
         values.put(RoutineContract.Routine.COLUMN_NAME_DESC, "Most common daily routine");
-        values.put(RoutineContract.Routine.COLUMN_NAME_DURATION, "00:05:00");
+        values.put(RoutineContract.Routine.COLUMN_NAME_DURATION_MS, DateFormatHandler.toLong("00:05:00"));
 
         // Insert the new row, returning the primary key value of the new row
         long newRowId;
@@ -85,7 +87,7 @@ public class MorningRoutineDbHelper extends SQLiteOpenHelper {
 
         ContentValues bridgeValues = new ContentValues();
         bridgeValues.put(RoutineContract.RoutineTaskBridge.COLUMN_NAME_ROUTINE_NM, "STANDARD ROUTINE");
-        bridgeValues.put(RoutineContract.RoutineTaskBridge.COLUMN_NAME_ROUTINE_TASK_NM, "Alexander Technique");
+        bridgeValues.put(RoutineContract.RoutineTaskBridge.COLUMN_NAME_TASK_NM, "Alexander Technique");
 
         newRowId = db.insert(
                 RoutineContract.RoutineTaskBridge.TABLE_NAME,
@@ -104,7 +106,7 @@ public class MorningRoutineDbHelper extends SQLiteOpenHelper {
 
         bridgeValues = new ContentValues();
         bridgeValues.put(RoutineContract.RoutineTaskBridge.COLUMN_NAME_ROUTINE_NM, "STANDARD ROUTINE");
-        bridgeValues.put(RoutineContract.RoutineTaskBridge.COLUMN_NAME_ROUTINE_TASK_NM, "Integral Bodywork");
+        bridgeValues.put(RoutineContract.RoutineTaskBridge.COLUMN_NAME_TASK_NM, "Integral Bodywork");
 
         newRowId = db.insert(
                 RoutineContract.RoutineTaskBridge.TABLE_NAME,

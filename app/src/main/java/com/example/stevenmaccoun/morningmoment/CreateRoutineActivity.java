@@ -153,14 +153,14 @@ public class CreateRoutineActivity extends AppCompatActivity {
 
         String description = routineDescTV.getText().toString();
 
-        Routine routine = new Routine(name, description, new ArrayList<RoutineTask>(), 0);
+        Routine routine = new Routine(name, description, new ArrayList<RoutineTask>());
         return routine;
     }
 
     public boolean saveRoutine(){
         String routineNm = routineNmTV.getText().toString();
         String routineDesc = routineDescTV.getText().toString();
-        Routine routine = new Routine(routineNm, routineDesc, currentTasks, 0);
+        Routine routine = new Routine(routineNm, routineDesc, currentTasks);
 
         boolean success = new RoutineRepository(this).Save(routine);
         return success;

@@ -11,26 +11,26 @@ import java.util.TimeZone;
  */
 public class DateFormatHandler {
 
-    private SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss", Locale.US);
-    private static DateFormatHandler instance = null;
+    private static SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss", Locale.US);
 
-    private DateFormatHandler(){
+    static {
         sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
     }
 
-    public static DateFormatHandler getInstance(){
-        if(instance==null){
-            return new DateFormatHandler();
+
+    public static long toLong(String sdfString)  {
+        Long millis = null;
+
+        try {
+            millis = sdf.parse(sdfString).getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
 
-        return instance;
+        return  millis;
     }
 
-    public long toLong(String sdfString) throws ParseException {
-        return sdf.parse(sdfString).getTime();
-    }
-
-    public String toString(long millis){
+    public static String toString(long millis){
         return sdf.format(new Date(millis));
     }
 }

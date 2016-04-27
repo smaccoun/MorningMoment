@@ -36,12 +36,7 @@ public class CreateRoutineTaskActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String name = tvName.getText().toString();
                 String desc = tvDesc.getText().toString();
-                long duration = 0;
-                try {
-                    duration = DateFormatHandler.getInstance().toLong(tvDuration.getText().toString());
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+                long duration = DateFormatHandler.toLong(tvDuration.getText().toString());
 
                 RoutineTask rt = new RoutineTask(name, desc, duration);
                 RoutineTaskRepository rtr = new RoutineTaskRepository(getApplicationContext());

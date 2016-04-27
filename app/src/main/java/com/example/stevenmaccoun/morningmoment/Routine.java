@@ -12,22 +12,26 @@ public class Routine {
     private String name;
     private String description;
     private ArrayList<RoutineTask> routineTasks;
-    private long durationMillis;
+    private long durationMillis = 0;
 
     public String getDescription() {
         return description;
     }
 
-    public Routine(String name, String description, ArrayList<RoutineTask> routineTasks, long durationMillis) {
+    public Routine(String name, String description, ArrayList<RoutineTask> routineTasks) {
         this.name = name;
         this.description = description;
 
         this.routineTasks = new ArrayList<>(routineTasks);
-        this.durationMillis = durationMillis;
+
+        for(RoutineTask rt : routineTasks){
+            this.durationMillis += rt.getDurationMillis();
+        }
     }
 
     public boolean addRoutineTask(RoutineTask routineTask){
         routineTasks.add(routineTask);
+        this.durationMillis += routineTask.getDurationMillis();
         return true;
     }
 
@@ -53,7 +57,7 @@ public class Routine {
     }
 
     public String getDurationText() {
-        return DateFormatHandler.getInstance().toString(durationMillis);
+        return DateFormatHandler.toString(durationMillis);
     }
 
 

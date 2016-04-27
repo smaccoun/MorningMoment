@@ -51,7 +51,7 @@ public class RoutineTaskManager {
                 " SELECT rt._id, rt.task_nm, rt.task_desc, rt.duration_ms " +
                         " FROM RoutineTask rt " +
                         " INNER JOIN RoutineTaskBridge b " +
-                        " ON b.routine_task_nm = rt.task_nm " +
+                        " ON b.task_nm = rt.task_nm " +
                         " WHERE b.routine_nm = " + qRoutineNm;
 
         Cursor c = MorningRoutineDbHelper.getHelper(context)
@@ -73,7 +73,7 @@ public class RoutineTaskManager {
         }
 
         routineTasks = new ArrayList<>(posRoutineTasks.values());
-        currentRoutine = new Routine(routineNm, "default", routineTasks, 30000);
+        currentRoutine = new Routine(routineNm, "default", routineTasks);
 
         return currentRoutine;
     }

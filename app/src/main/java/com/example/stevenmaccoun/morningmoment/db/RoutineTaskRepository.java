@@ -63,7 +63,7 @@ public class RoutineTaskRepository implements IRepository<RoutineTask, String> {
 
         values.put("task_nm", task.getTitle());
         values.put("task_desc", task.getDescription());
-        values.put("duration_ms", task.getDurationString());
+        values.put("duration_ms", task.getDurationMillis());
 
         boolean success = db.insert("RoutineTask", null, values) > 0;
         db.close();
@@ -82,7 +82,7 @@ public class RoutineTaskRepository implements IRepository<RoutineTask, String> {
             }
             values.put("task_nm", task.getTitle());
             values.put("task_desc", task.getDescription());
-            values.put("duration_ms", task.getDurationString());
+            values.put("duration_ms", task.getDurationMillis());
 
             success = success & (db.insert("RoutineTask", null, values) > 0);
         }

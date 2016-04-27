@@ -47,12 +47,7 @@ public class RoutineTaskActivity extends AppCompatActivity {
     }
 
     private void launchTimer(String duration){
-        long millisToFinish = 0;
-        try {
-            millisToFinish = DateFormatHandler.getInstance().toLong(duration);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        long millisToFinish = DateFormatHandler.toLong(duration);
 
         timer = new RoutineTaskCountdownTimer(millisToFinish, 1000);
         timer.start();

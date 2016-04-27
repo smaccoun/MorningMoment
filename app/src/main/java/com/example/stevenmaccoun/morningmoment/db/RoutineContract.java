@@ -13,7 +13,7 @@ public class RoutineContract {
         public static final String TABLE_NAME = "Routine";
         public static final String COLUMN_NAME_NM = "routine_nm";
         public static final String COLUMN_NAME_DESC = "routine_desc";
-        public static final String COLUMN_NAME_DURATION = "duration_ms";
+        public static final String COLUMN_NAME_DURATION_MS = "duration_ms";
     }
 
     public static abstract class RoutineTask implements BaseColumns{
@@ -26,7 +26,7 @@ public class RoutineContract {
     public static abstract class RoutineTaskBridge implements BaseColumns{
         public static final String TABLE_NAME = "RoutineTaskBridge";
         public static final String COLUMN_NAME_ROUTINE_NM = "routine_nm";
-        public static final String COLUMN_NAME_ROUTINE_TASK_NM = "routine_task_nm";
+        public static final String COLUMN_NAME_TASK_NM = "task_nm";
     }
 
 }
