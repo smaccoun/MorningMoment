@@ -1,7 +1,9 @@
 package com.example.stevenmaccoun.morningmoment;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -60,8 +62,10 @@ public class CreateRoutineActivity extends AppCompatActivity {
         saveB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveRoutine();
-                finish();
+                if(isValidForm()){
+                    saveRoutine();
+                    finish();
+                }
             }
         });
 
@@ -99,6 +103,7 @@ public class CreateRoutineActivity extends AppCompatActivity {
             }
         });
     }
+
 
     private void displayCurrentTasks(){
         String taskStr = "";
@@ -165,6 +170,45 @@ public class CreateRoutineActivity extends AppCompatActivity {
         boolean success = new RoutineRepository(this).Save(routine);
         return success;
     }
+
+    private boolean isValidForm(){
+
+        boolean isValidForm = true;
+        String errorMsg = "";
+
+        //Ensure Routine has a name with at least one character or digit
+        if(!routineNmTV.getText().toString().matches(".*[a-zA-Z]+.*")){
+            isValidForm = false;
+            errorMsg = errorMsg + "Routine name must contain at least one valid letter or digit";
+        }
+
+        //Ensure Routine has at least one task
+        if(currentTasks.size() == 0){
+            isValidForm = false;
+            errorMsg = errorMsg + "\n" + "Routine must contain at least one task";
+        }
+
+        if(!isValidForm){
+            AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
+            builder1.setMessage(errorMsg);
+            builder1.setCancelable(true);
+
+            builder1.setPositiveButton(
+                    "Okay",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+
+            AlertDialog alert = builder1.create();
+            alert.show();
+        }
+
+        return isValidForm;
+    }
+
+
 
     @Override
     protected void onResume(){
