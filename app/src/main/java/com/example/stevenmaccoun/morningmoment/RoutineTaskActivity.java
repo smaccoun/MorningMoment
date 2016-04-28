@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.stevenmaccoun.morningmoment.utilities.DateFormatHandler;
@@ -20,6 +22,16 @@ public class RoutineTaskActivity extends AppCompatActivity {
     private TextView tvTaskNm;
     private TextView tvTaskDesc;
     private TextView tvDuration;
+
+    private Button pauseResumeB;
+    private final String PAUSE_TEXT = "Pause";
+    private final String RESUME_TEXT = "Resume";
+    private enum TASK_STATE {
+        PAUSED,
+        RUNNING
+    }
+    private TASK_STATE currentTaskState;
+    private long millisRemaining;
 
     private RoutineTaskCountdownTimer timer;
 
@@ -36,23 +48,41 @@ public class RoutineTaskActivity extends AppCompatActivity {
         tvTaskNm = (TextView) findViewById(R.id.task_nm);
         tvTaskDesc = (TextView) findViewById(R.id.task_desc);
         tvDuration = (TextView) findViewById(R.id.task_duration);
+        pauseResumeB = (Button) findViewById(R.id.pause_resume_b);
 
-        RoutineTask currentTask = RoutineTaskManager.getInstance().getCurrentTask();
+        final RoutineTask currentTask = RoutineTaskManager.getInstance().getCurrentTask();
         String taskNm = currentTask.getTitle();
         String routineDesc = currentTask.getDescription();
-        String duration = currentTask.getDurationString();
+        String durationText = currentTask.getDurationString();
 
         tvTaskNm.setText(taskNm);
         tvTaskDesc.setText(routineDesc);
-        tvDuration.setText(duration);
+        tvDuration.setText(durationText);
 
-        launchTimer(duration);
+        pauseResumeB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(currentTaskState == TASK_STATE.RUNNING){
+                    pauseResumeB.setText(RESUME_TEXT);
+                    timer.cancel();
+                    currentTaskState = TASK_STATE.PAUSED;
+                }
+                else if(currentTaskState == TASK_STATE.PAUSED){
+                    pauseResumeB.setText(PAUSE_TEXT);
+                    startCountdownTimer(millisRemaining);
+                    currentTaskState = TASK_STATE.RUNNING;
+                }
+
+            }
+        });
+
+        long duration = DateFormatHandler.toLong(durationText);
+        startCountdownTimer(duration);
+
     }
 
-    private void launchTimer(String duration){
-        long millisToFinish = DateFormatHandler.toLong(duration);
-
-        timer = new RoutineTaskCountdownTimer(millisToFinish, 1000);
+    private void startCountdownTimer(long duration){
+        timer = new RoutineTaskCountdownTimer(duration, 1000);
         timer.start();
     }
 
@@ -88,16 +118,17 @@ public class RoutineTaskActivity extends AppCompatActivity {
 
         private SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss", Locale.US);
 
-
         public RoutineTaskCountdownTimer(long millisInFuture, long countDownInterval) {
             super(millisInFuture, countDownInterval);
             sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+            currentTaskState = TASK_STATE.RUNNING;
         }
 
 
         @Override
         public void onTick(long millisUntilFinished) {
             tvDuration.setText(sdf.format(millisUntilFinished));
+            millisRemaining = millisUntilFinished;
         }
 
         @Override
@@ -112,6 +143,7 @@ public class RoutineTaskActivity extends AppCompatActivity {
 
             proceedNextTaskDialog();
         }
+
 
     }
 
