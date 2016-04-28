@@ -19,6 +19,7 @@
         <activity android:name=".RoutineTaskActivity" />
         <activity android:name=".CreateRoutineActivity" />
         <activity android:name=".CreateRoutineTaskActivity"></activity>
+
     </application>
 
 </manifest>

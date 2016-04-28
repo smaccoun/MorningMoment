@@ -1,13 +1,16 @@
 package com.example.stevenmaccoun.morningmoment;
 
+import android.content.DialogInterface;
+import android.media.AudioManager;
+import android.media.ToneGenerator;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
 import com.example.stevenmaccoun.morningmoment.utilities.DateFormatHandler;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -55,7 +58,24 @@ public class RoutineTaskActivity extends AppCompatActivity {
 
     public void finishRoutine(){
         timer.cancel();
-        finish();
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
+        builder1.setMessage("Congrats, you finished!");
+        builder1.setCancelable(true);
+
+        builder1.setPositiveButton(
+                "Okay!",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                        finish();
+                    }
+                });
+
+
+        AlertDialog alert11 = builder1.create();
+        alert11.show();
+
+
     }
 
     @Override
@@ -82,14 +102,40 @@ public class RoutineTaskActivity extends AppCompatActivity {
 
         @Override
         public void onFinish() {
+            alertFinishedTask();
+
             int taskNo = RoutineTaskManager.getInstance().incrementCurrentTaskNumber();
             if(taskNo < 0){
                 finishRoutine();
                 return;
             }
 
-            initialize();
+            proceedNextTaskDialog();
         }
 
+    }
+
+    private void proceedNextTaskDialog(){
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
+        builder1.setMessage("Ready for next task?!");
+        builder1.setCancelable(true);
+
+        builder1.setPositiveButton(
+                "Okay!",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                        initialize();
+                    }
+                });
+
+        AlertDialog alert11 = builder1.create();
+        alert11.show();
+
+    }
+
+    private void alertFinishedTask(){
+        ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_ALARM, 100);
+        toneG.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 500);
     }
 }
