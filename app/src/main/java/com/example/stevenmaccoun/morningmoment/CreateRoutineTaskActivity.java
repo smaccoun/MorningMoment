@@ -1,7 +1,9 @@
 package com.example.stevenmaccoun.morningmoment;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -40,20 +42,63 @@ public class CreateRoutineTaskActivity extends AppCompatActivity {
         createTaskB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String name = tvName.getText().toString();
-                String desc = tvDesc.getText().toString();
-                String webUrl = tvWebUrl.getText().toString();
-                long duration = DateFormatHandler.toLong(tvDuration.getText().toString());
 
-                RoutineTask rt = new RoutineTask(name, desc, duration, webUrl);
-                RoutineTaskRepository rtr = new RoutineTaskRepository(getApplicationContext());
-                rtr.Save(rt);
+                if(isValidForm()){
+                    String name = tvName.getText().toString();
+                    String desc = tvDesc.getText().toString();
+                    String webUrl = tvWebUrl.getText().toString();
+                    long duration = DateFormatHandler.toLong(tvDuration.getText().toString());
 
-                Intent resultIntent = new Intent();
-                resultIntent.putExtra(PUBLIC_STATIC_STRING_IDENTIFIER, rt.getTitle());
-                setResult(Activity.RESULT_OK, resultIntent);
-                finish();
+                    RoutineTask rt = new RoutineTask(name, desc, duration, webUrl);
+                    RoutineTaskRepository rtr = new RoutineTaskRepository(getApplicationContext());
+                    rtr.Save(rt);
+
+                    Intent resultIntent = new Intent();
+                    resultIntent.putExtra(PUBLIC_STATIC_STRING_IDENTIFIER, rt.getTitle());
+                    setResult(Activity.RESULT_OK, resultIntent);
+                    finish();
+                }
             }
         });
+    }
+
+    private boolean isValidForm(){
+
+        boolean isValidForm = true;
+        String errorMsg = "";
+
+        //Ensure taskNm has at least one valid character or digit
+        boolean doesNameContainValidChars
+                = tvName.getText().toString().matches(".*[a-zA-Z]+.*");
+        if(!doesNameContainValidChars){
+            isValidForm = false;
+            errorMsg = errorMsg + "\n" + "* Please enter a valid routine name";
+        }
+
+        //Ensure duration is entered
+        if(tvDuration.getText().length() < 1){
+            isValidForm = false;
+            errorMsg = errorMsg + "\n" + "* Please enter a valid duration";
+        }
+
+
+        if(!isValidForm){
+            AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
+            builder1.setMessage(errorMsg);
+            builder1.setCancelable(true);
+
+            builder1.setPositiveButton(
+                    "Okay",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+
+            AlertDialog alert = builder1.create();
+            alert.show();
+        }
+
+        return isValidForm;
     }
 }
