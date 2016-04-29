@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 
 import com.example.stevenmaccoun.morningmoment.db.MorningRoutineDbHelper;
+import com.example.stevenmaccoun.morningmoment.db.RoutineContract;
 
 import java.util.ArrayList;
 import java.util.TreeMap;
@@ -48,7 +49,7 @@ public class RoutineTaskManager {
         ArrayList<RoutineTask> routineTasks;
 
         String rtView =
-                " SELECT rt._id, rt.task_nm, rt.task_desc, rt.duration_ms " +
+                " SELECT rt._id, rt.task_nm, rt.task_desc, rt.duration_ms, rt.web_url " +
                         " FROM RoutineTask rt " +
                         " INNER JOIN RoutineTaskBridge b " +
                         " ON b.task_nm = rt.task_nm " +
@@ -66,7 +67,8 @@ public class RoutineTaskManager {
                 String taskNm = c.getString(c.getColumnIndexOrThrow("task_nm"));
                 String taskDesc = c.getString(c.getColumnIndexOrThrow("task_desc"));
                 Integer taskDuration = c.getInt(c.getColumnIndexOrThrow("duration_ms"));
-                posRoutineTasks.put(pos, new RoutineTask(taskNm, taskDesc, taskDuration));
+                String webUrl = c.getString(c.getColumnIndexOrThrow(RoutineContract.RoutineTask.COLUMN_NAME_WEB_URL));
+                posRoutineTasks.put(pos, new RoutineTask(taskNm, taskDesc, taskDuration, webUrl));
             }
         } catch (Exception e){
             c.close();

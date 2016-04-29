@@ -32,7 +32,7 @@ public class RoutineRepository implements IRepository<Routine, String> {
         SQLiteDatabase db = MorningRoutineDbHelper.getHelper(context).getWritableDatabase();
         Cursor cursor =
                 db.rawQuery("SELECT r._id, r.routine_nm, r.routine_desc, " +
-                                    "rt.task_nm, rt.task_desc, rt.duration_ms" +
+                                    "rt.task_nm, rt.task_desc, rt.duration_ms, rt.web_url" +
                             " FROM Routine r " +
                             " INNER JOIN RoutineTaskBridge b ON b.routine_nm = r.routine_nm" +
                             " INNER JOIN RoutineTask rt ON rt.task_nm = b.task_nm", null);
@@ -47,7 +47,9 @@ public class RoutineRepository implements IRepository<Routine, String> {
                 String taskNm = cursor.getString(cursor.getColumnIndexOrThrow("task_nm"));
                 String taskDesc = cursor.getString(cursor.getColumnIndexOrThrow("task_desc"));
                 int taskDuration = cursor.getInt(cursor.getColumnIndexOrThrow("duration_ms"));
-                RoutineTask rt = new RoutineTask(taskNm, taskDesc, taskDuration);
+                String taskWebUrl = cursor.getString(
+                        cursor.getColumnIndexOrThrow(RoutineContract.RoutineTask.COLUMN_NAME_WEB_URL));
+                RoutineTask rt = new RoutineTask(taskNm, taskDesc, taskDuration,taskWebUrl);
 
                 if(routineMap.containsKey(routineNm)){
                     routineMap.get(routineNm).addRoutineTask(rt);

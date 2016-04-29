@@ -8,6 +8,7 @@ import android.os.CountDownTimer;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -22,6 +23,8 @@ public class RoutineTaskActivity extends AppCompatActivity {
     private TextView tvTaskNm;
     private TextView tvTaskDesc;
     private TextView tvDuration;
+    private TextView tvWebUrl;
+    private WebView webView;
 
     private Button pauseResumeB;
     private final String PAUSE_TEXT = "Pause";
@@ -48,16 +51,24 @@ public class RoutineTaskActivity extends AppCompatActivity {
         tvTaskNm = (TextView) findViewById(R.id.task_nm);
         tvTaskDesc = (TextView) findViewById(R.id.task_desc);
         tvDuration = (TextView) findViewById(R.id.task_duration);
+        tvWebUrl = (TextView) findViewById(R.id.task_web_url);
+        webView = (WebView) findViewById(R.id.webview);
         pauseResumeB = (Button) findViewById(R.id.pause_resume_b);
 
         final RoutineTask currentTask = RoutineTaskManager.getInstance().getCurrentTask();
         String taskNm = currentTask.getTitle();
         String routineDesc = currentTask.getDescription();
         String durationText = currentTask.getDurationString();
+        String webUrl = currentTask.getWebUrlLink();
 
         tvTaskNm.setText(taskNm);
         tvTaskDesc.setText(routineDesc);
         tvDuration.setText(durationText);
+        tvWebUrl.setText(webUrl);
+
+        boolean doesStartHttp = (webUrl.startsWith("http://") || webUrl.startsWith("https://"));
+        webUrl = doesStartHttp ? webUrl : "http://" + webUrl;
+        webView.loadUrl(webUrl);
 
         pauseResumeB.setOnClickListener(new View.OnClickListener() {
             @Override

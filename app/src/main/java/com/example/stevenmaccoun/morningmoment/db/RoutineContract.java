@@ -21,6 +21,7 @@ public class RoutineContract {
         public static final String COLUMN_NAME_TITLE = "task_nm";
         public static final String COLUMN_NAME_DESC = "task_desc";
         public static final String COLUMN_NAME_DURATION_MS = "duration_ms";
+        public static final String COLUMN_NAME_WEB_URL = "web_url";
     }
 
     public static abstract class RoutineTaskBridge implements BaseColumns{

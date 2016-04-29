@@ -20,6 +20,7 @@ public class CreateRoutineTaskActivity extends AppCompatActivity {
     private TextView tvName;
     private TextView tvDesc;
     private TextView tvDuration;
+    private TextView tvWebUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +30,7 @@ public class CreateRoutineTaskActivity extends AppCompatActivity {
         tvName = (TextView) findViewById(R.id.nm_entry);
         tvDesc = (TextView) findViewById(R.id.desc_entry);
         tvDuration = (TextView) findViewById(R.id.duration_entry);
+        tvWebUrl = (TextView) findViewById(R.id.web_url_entry);
 
         createTaskB = (Button) findViewById(R.id.save);
         createTaskB.setOnClickListener(new View.OnClickListener() {
@@ -36,12 +38,12 @@ public class CreateRoutineTaskActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String name = tvName.getText().toString();
                 String desc = tvDesc.getText().toString();
+                String webUrl = tvWebUrl.getText().toString();
                 long duration = DateFormatHandler.toLong(tvDuration.getText().toString());
 
-                RoutineTask rt = new RoutineTask(name, desc, duration);
+                RoutineTask rt = new RoutineTask(name, desc, duration, webUrl);
                 RoutineTaskRepository rtr = new RoutineTaskRepository(getApplicationContext());
-                boolean success = rtr.Save(rt);
-                Toast.makeText(getApplicationContext(), "Task Created", Toast.LENGTH_LONG);
+                rtr.Save(rt);
                 finish();
             }
         });
