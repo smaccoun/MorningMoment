@@ -52,8 +52,28 @@ public class RoutineTaskRepository implements IRepository<RoutineTask, String> {
     }
 
     @Override
-    public RoutineTask GetById(String s) {
-        return null;
+    public RoutineTask GetById(String task_nm) {
+
+        SQLiteDatabase db = MorningRoutineDbHelper.getHelper(context).getWritableDatabase();
+
+        Cursor cursor =
+                db.rawQuery("SELECT _id, task_nm, task_desc, duration_ms, web_url " +
+                        " FROM RoutineTask rt" +
+                        " WHERE rt.task_nm = \"" + task_nm + "\"", null);
+
+        RoutineTask routineTask = null;
+
+        if(cursor.moveToFirst()){
+            String name = cursor.getString(cursor.getColumnIndexOrThrow("task_nm"));
+            String description = cursor.getString(cursor.getColumnIndexOrThrow("task_desc"));
+            int duration = cursor.getInt(cursor.getColumnIndexOrThrow("duration_ms"));
+            String webUrl = cursor.getString(cursor.getColumnIndexOrThrow(RoutineContract.RoutineTask.COLUMN_NAME_WEB_URL));
+            routineTask = new RoutineTask(name, description, duration, webUrl);
+        }
+
+        db.close();
+
+        return routineTask;
     }
 
     @Override

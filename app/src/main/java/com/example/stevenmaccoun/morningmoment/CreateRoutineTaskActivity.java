@@ -1,5 +1,7 @@
 package com.example.stevenmaccoun.morningmoment;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -21,6 +23,8 @@ public class CreateRoutineTaskActivity extends AppCompatActivity {
     private TextView tvDesc;
     private TextView tvDuration;
     private TextView tvWebUrl;
+
+    public static final String PUBLIC_STATIC_STRING_IDENTIFIER = "routine_nm";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +48,10 @@ public class CreateRoutineTaskActivity extends AppCompatActivity {
                 RoutineTask rt = new RoutineTask(name, desc, duration, webUrl);
                 RoutineTaskRepository rtr = new RoutineTaskRepository(getApplicationContext());
                 rtr.Save(rt);
+
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra(PUBLIC_STATIC_STRING_IDENTIFIER, rt.getTitle());
+                setResult(Activity.RESULT_OK, resultIntent);
                 finish();
             }
         });

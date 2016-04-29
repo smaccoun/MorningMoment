@@ -1,5 +1,6 @@
 package com.example.stevenmaccoun.morningmoment;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -35,6 +36,8 @@ public class CreateRoutineActivity extends AppCompatActivity {
 
     private ListView tasksLV;
     private TextView currentTasksTV;
+
+    static final int INTENT_RETURN_INT = 1;
 
     private ArrayList<RoutineTask> currentTasks = new ArrayList<>();
 
@@ -80,7 +83,7 @@ public class CreateRoutineActivity extends AppCompatActivity {
                 }
 
                 RoutineController.getInstance().initialize(routine);
-                startActivity(i);
+                startActivityForResult(i, INTENT_RETURN_INT);
             }
         });
 
@@ -97,12 +100,28 @@ public class CreateRoutineActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 RoutineTask rt = (RoutineTask) parent.getAdapter().getItem(position);
                 currentTasks.add(rt);
-                Toast.makeText(getApplicationContext(), "Added " + rt.getTitle(), Toast.LENGTH_LONG);
                 displayCurrentTasks();
                 tasksLV.setVisibility(View.GONE);
             }
         });
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch(requestCode) {
+            case (INTENT_RETURN_INT) : {
+                if (resultCode == Activity.RESULT_OK) {
+                    String taskNm = data.getStringExtra(CreateRoutineTaskActivity.PUBLIC_STATIC_STRING_IDENTIFIER);
+                    RoutineTask rt = new RoutineTaskRepository(this).GetById(taskNm);
+                    currentTasks.add(rt);
+                    displayCurrentTasks();
+                }
+                break;
+            }
+        }
+    }
+
 
 
     private void displayCurrentTasks(){
