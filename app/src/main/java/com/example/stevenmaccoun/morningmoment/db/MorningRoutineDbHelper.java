@@ -79,8 +79,7 @@ public class MorningRoutineDbHelper extends SQLiteOpenHelper {
         ContentValues taskValues = new ContentValues();
         taskValues.put(RoutineContract.RoutineTask.COLUMN_NAME_TITLE, "Alexander Technique");
         taskValues.put(RoutineContract.RoutineTask.COLUMN_NAME_DESC, "Lie on yo stomach and move yo legs DAWG");
-        taskValues.put(RoutineContract.RoutineTask.COLUMN_NAME_DURATION_MS, 3000);
-        taskValues.put(RoutineContract.RoutineTask.COLUMN_NAME_WEB_URL, "www.google.com");
+        taskValues.put(RoutineContract.RoutineTask.COLUMN_NAME_DURATION_MS, 120000);
 
         newRowId = db.insert(
                 RoutineContract.RoutineTask.TABLE_NAME,
@@ -99,8 +98,7 @@ public class MorningRoutineDbHelper extends SQLiteOpenHelper {
         taskValues = new ContentValues();
         taskValues.put(RoutineContract.RoutineTask.COLUMN_NAME_TITLE, "Integral Bodywork");
         taskValues.put(RoutineContract.RoutineTask.COLUMN_NAME_DESC, "Open up the integral bodywork module!");
-        taskValues.put(RoutineContract.RoutineTask.COLUMN_NAME_DURATION_MS, 3000);
-        taskValues.put(RoutineContract.RoutineTask.COLUMN_NAME_WEB_URL, "www.google.com");
+        taskValues.put(RoutineContract.RoutineTask.COLUMN_NAME_DURATION_MS, 1000000);
 
         newRowId = db.insert(
                 RoutineContract.RoutineTask.TABLE_NAME,
