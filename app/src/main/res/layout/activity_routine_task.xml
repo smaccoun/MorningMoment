@@ -44,11 +44,11 @@
             android:background="@color/material_deep_teal_200"
             android:textColor="@color/abc_input_method_navigation_guard" />
 
-        <WebView  xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/webview"
-            android:layout_width="fill_parent"
+        <Button
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            />
+            android:text="URL Link"
+            android:id="@+id/url_link" />
 
         <TextView
             android:layout_width="wrap_content"
