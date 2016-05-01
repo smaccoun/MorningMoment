@@ -22,7 +22,7 @@ public class Routine {
         this.name = name;
         this.description = description;
 
-        this.routineTasks = new ArrayList<>(routineTasks);
+        this.routineTasks = routineTasks;
 
         for(RoutineTask rt : routineTasks){
             this.durationMillis += rt.getDurationMillis();

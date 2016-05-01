@@ -26,7 +26,9 @@ public class MorningRoutineDbHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "MorningRoutine.db";
 
     private static final String TEXT_TYPE = " TEXT";
+    private static final String TEXT_TYPE_NOT_NULL = " TEXT NOT NULL ";
     private static final String INTEGER_TYPE = " INTEGER";
+    private static final String INTEGER_NOT_NULL_TYPE = " INTEGER NOT NULL";
     private static final String COMMA_SEP = ",";
     private static final String SQL_CREATE_ROUTINE_TABLE =
             "CREATE TABLE " + RoutineContract.Routine.TABLE_NAME + "(" +
@@ -46,8 +48,30 @@ public class MorningRoutineDbHelper extends SQLiteOpenHelper {
     private static final String SQL_CREATE_ROUTINE_TASK_BRIDGE_TABLE =
             "CREATE TABLE " + RoutineContract.RoutineTaskBridge.TABLE_NAME + "(" +
                     RoutineContract.RoutineTask._ID + " INTEGER PRIMARY KEY," +
-                    RoutineContract.RoutineTaskBridge.COLUMN_NAME_ROUTINE_NM + TEXT_TYPE + COMMA_SEP +
-                    RoutineContract.RoutineTaskBridge.COLUMN_NAME_TASK_NM + TEXT_TYPE + ")";
+                    RoutineContract.RoutineTaskBridge.COLUMN_NAME_ROUTINE_NM + TEXT_TYPE_NOT_NULL
+                            + COMMA_SEP +
+                    RoutineContract.RoutineTaskBridge.COLUMN_NAME_TASK_NM + TEXT_TYPE_NOT_NULL
+                            + COMMA_SEP +
+                    RoutineContract.RoutineTaskBridge.COLUMN_ORDER_NO + INTEGER_NOT_NULL_TYPE + ")";
+
+
+    /*
+       ***** View Creation ********
+     */
+
+    private static final String SQL_CREATE_GET_ROUTINE_TASKS_VW =
+            "CREATE VIEW IF NOT EXISTS get_routines_tasks_vw AS " +
+                    "SELECT r._id AS routine_id, " +
+                            "r.routine_nm, " +
+                            "r.routine_desc, " +
+                            "rt.task_nm, " +
+                            "rt.task_desc, " +
+                            "rt.duration_ms AS task_duration, " +
+                            "rt.web_url, " +
+                            "b.order_no" +
+                    " FROM Routine r " +
+                    " INNER JOIN RoutineTaskBridge b ON b.routine_nm = r.routine_nm" +
+                    " INNER JOIN RoutineTask rt ON rt.task_nm = b.task_nm";
 
 
 
@@ -57,9 +81,15 @@ public class MorningRoutineDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        //Create all tables
         db.execSQL(SQL_CREATE_ROUTINE_TABLE);
         db.execSQL(SQL_CREATE_ROUTINE_TASK_TABLE);
         db.execSQL(SQL_CREATE_ROUTINE_TASK_BRIDGE_TABLE);
+
+        //Create all views
+        db.execSQL(SQL_CREATE_GET_ROUTINE_TASKS_VW);
+
+        //Load default data
         insertDefaultRoutines(db);
     }
 
@@ -89,6 +119,7 @@ public class MorningRoutineDbHelper extends SQLiteOpenHelper {
         ContentValues bridgeValues = new ContentValues();
         bridgeValues.put(RoutineContract.RoutineTaskBridge.COLUMN_NAME_ROUTINE_NM, "STANDARD ROUTINE");
         bridgeValues.put(RoutineContract.RoutineTaskBridge.COLUMN_NAME_TASK_NM, "Alexander Technique");
+        bridgeValues.put(RoutineContract.RoutineTaskBridge.COLUMN_ORDER_NO, 1);
 
         newRowId = db.insert(
                 RoutineContract.RoutineTaskBridge.TABLE_NAME,
@@ -108,6 +139,7 @@ public class MorningRoutineDbHelper extends SQLiteOpenHelper {
         bridgeValues = new ContentValues();
         bridgeValues.put(RoutineContract.RoutineTaskBridge.COLUMN_NAME_ROUTINE_NM, "STANDARD ROUTINE");
         bridgeValues.put(RoutineContract.RoutineTaskBridge.COLUMN_NAME_TASK_NM, "Integral Bodywork");
+        bridgeValues.put(RoutineContract.RoutineTaskBridge.COLUMN_ORDER_NO, 2);
 
         newRowId = db.insert(
                 RoutineContract.RoutineTaskBridge.TABLE_NAME,

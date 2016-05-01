@@ -29,9 +29,9 @@ public class RoutineTaskManager {
         return instance;
     }
 
-    public RoutineTaskManager initializeRoutine(Context context, String routineNm)
+    public RoutineTaskManager initializeRoutine(Context context, Routine routine)
     {
-        instance.currentRoutine = loadRoutine(context, routineNm);
+        instance.currentRoutine = routine;
         instance.currentTaskNumber = 0;
 
         return instance;

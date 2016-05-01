@@ -29,13 +29,19 @@ public class RoutineRepository implements IRepository<Routine, String> {
 
     @Override
     public ArrayList<Routine> GetAll() {
-        SQLiteDatabase db = MorningRoutineDbHelper.getHelper(context).getWritableDatabase();
-        Cursor cursor =
-                db.rawQuery("SELECT r._id, r.routine_nm, r.routine_desc, " +
-                                    "rt.task_nm, rt.task_desc, rt.duration_ms, rt.web_url" +
-                            " FROM Routine r " +
-                            " INNER JOIN RoutineTaskBridge b ON b.routine_nm = r.routine_nm" +
-                            " INNER JOIN RoutineTask rt ON rt.task_nm = b.task_nm", null);
+        SQLiteDatabase db = MorningRoutineDbHelper.getHelper(context).getReadableDatabase();
+        String query =
+                "SELECT  order_no AS _id, " +
+                        "routine_nm, " +
+                        "routine_desc, " +
+                        "task_nm, " +
+                        "task_desc, " +
+                        "task_duration, " +
+                        "web_url, " +
+                        "order_no" +
+                " FROM get_routines_tasks_vw " +
+                " ORDER BY order_no ASC";
+        Cursor cursor = db.rawQuery(query, null);
 
         HashMap<String, Routine> routineMap = new HashMap<>();
 
@@ -46,7 +52,7 @@ public class RoutineRepository implements IRepository<Routine, String> {
                 String routineDesc = cursor.getString(cursor.getColumnIndexOrThrow("routine_desc"));
                 String taskNm = cursor.getString(cursor.getColumnIndexOrThrow("task_nm"));
                 String taskDesc = cursor.getString(cursor.getColumnIndexOrThrow("task_desc"));
-                int taskDuration = cursor.getInt(cursor.getColumnIndexOrThrow("duration_ms"));
+                int taskDuration = cursor.getInt(cursor.getColumnIndexOrThrow("task_duration"));
                 String taskWebUrl = cursor.getString(
                         cursor.getColumnIndexOrThrow(RoutineContract.RoutineTask.COLUMN_NAME_WEB_URL));
                 RoutineTask rt = new RoutineTask(taskNm, taskDesc, taskDuration,taskWebUrl);
@@ -114,9 +120,12 @@ public class RoutineRepository implements IRepository<Routine, String> {
 
         boolean success = true;
 
-        for(RoutineTask rt : routine.getRoutineTasks()){
+        ArrayList<RoutineTask> routineTasks = routine.getRoutineTasks();
+
+        for(int i = 0; i < routineTasks.size(); ++i){
             values.put("routine_nm", routineNm);
-            values.put("task_nm", rt.getTitle());
+            values.put("task_nm", routineTasks.get(i).getTitle());
+            values.put("order_no", i);
 
             success = success & db.insert(ROUTINE_TASK_BRIDGE_TABLE_NAME, null, values) > 0;
         }

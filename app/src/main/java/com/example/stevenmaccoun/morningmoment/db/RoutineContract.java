@@ -28,6 +28,7 @@ public class RoutineContract {
         public static final String TABLE_NAME = "RoutineTaskBridge";
         public static final String COLUMN_NAME_ROUTINE_NM = "routine_nm";
         public static final String COLUMN_NAME_TASK_NM = "task_nm";
+        public static final String COLUMN_ORDER_NO = "order_no";
     }
 
 }

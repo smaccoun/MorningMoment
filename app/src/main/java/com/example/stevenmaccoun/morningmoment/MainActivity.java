@@ -61,9 +61,8 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 Routine routine = (Routine) parent.getItemAtPosition(position);
-                String routineNm = routine.getName();
                 RoutineTaskManager.getInstance()
-                        .initializeRoutine(getApplicationContext(), routineNm);
+                        .initializeRoutine(getApplicationContext(), routine);
 
                 Intent i = new Intent(MainActivity.this, RoutineActivity.class);
                 startActivity(i);

@@ -50,8 +50,9 @@ public class RoutineActivity extends AppCompatActivity {
 
     private void populateRoutineTasksLV(Routine routine) {
 
-        ArrayList<RoutineTask> routineTasks = new ArrayList<>(routine.getRoutineTasks());
+        ArrayList<RoutineTask> routineTasks = routine.getRoutineTasks();
         RoutineTaskAdapter routineTaskAdapter = new RoutineTaskAdapter(this, routineTasks);
+        routineTaskAdapter.notifyDataSetChanged();
         routineTasksLV.setAdapter(routineTaskAdapter);
     }
 
