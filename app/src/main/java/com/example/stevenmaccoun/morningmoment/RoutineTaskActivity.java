@@ -14,6 +14,7 @@ import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 import com.example.stevenmaccoun.morningmoment.utilities.DateFormatHandler;
 
@@ -27,6 +28,7 @@ public class RoutineTaskActivity extends AppCompatActivity {
     private TextView tvTaskDesc;
     private TextView tvDuration;
     private TextView tvWebUrl;
+    private VideoView videoView;
 
     private Button pauseResumeB;
     private final String PAUSE_TEXT = "Pause";
@@ -56,15 +58,20 @@ public class RoutineTaskActivity extends AppCompatActivity {
         tvDuration = (TextView) findViewById(R.id.task_duration);
         tvWebUrl = (TextView) findViewById(R.id.url_link);
         pauseResumeB = (Button) findViewById(R.id.pause_resume_b);
+        videoView = (VideoView) findViewById(R.id.videoView);
 
         currentTask = RoutineTaskManager.getInstance().getCurrentTask();
         String taskNm = currentTask.getTitle();
         String routineDesc = currentTask.getDescription();
         String durationText = currentTask.getDurationString();
+        String videoUrl = currentTask.getVideoUrlPath();
 
         tvTaskNm.setText(taskNm);
         tvTaskDesc.setText(routineDesc);
         tvDuration.setText(durationText);
+        if(videoUrl != null){
+            tvTaskDesc.setText(routineDesc + "\n" + videoUrl);
+        }
 
 
 

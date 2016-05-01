@@ -38,6 +38,7 @@ public class RoutineRepository implements IRepository<Routine, String> {
                         "task_desc, " +
                         "task_duration, " +
                         "web_url, " +
+                        "video_url, " +
                         "order_no" +
                 " FROM get_routines_tasks_vw " +
                 " ORDER BY order_no ASC";
@@ -55,7 +56,9 @@ public class RoutineRepository implements IRepository<Routine, String> {
                 int taskDuration = cursor.getInt(cursor.getColumnIndexOrThrow("task_duration"));
                 String taskWebUrl = cursor.getString(
                         cursor.getColumnIndexOrThrow(RoutineContract.RoutineTask.COLUMN_NAME_WEB_URL));
-                RoutineTask rt = new RoutineTask(taskNm, taskDesc, taskDuration,taskWebUrl);
+                String videoUrl = cursor.getString(
+                        cursor.getColumnIndexOrThrow(RoutineContract.RoutineTask.COLUMN_NAME_VIDEO_URL));
+                RoutineTask rt = new RoutineTask(taskNm, taskDesc, taskDuration,taskWebUrl, videoUrl);
 
                 if(routineMap.containsKey(routineNm)){
                     routineMap.get(routineNm).addRoutineTask(rt);
@@ -93,8 +96,7 @@ public class RoutineRepository implements IRepository<Routine, String> {
 
         boolean success;
         success = insertRoutineRows(db, routine) &
-                  insertRoutineTaskBridgeRows(db, routine) &
-                  insertRoutineTaskRows(db, routine);
+                  insertRoutineTaskBridgeRows(db, routine);
 
         db.close();
 

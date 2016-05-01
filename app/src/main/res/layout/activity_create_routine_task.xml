@@ -70,6 +70,19 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="Add Video"
+        android:id="@+id/add_video_b" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Vide URL"
+        android:id="@+id/tv_video_url_path" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="SAVE"
         android:id="@+id/save"
         android:layout_gravity="center_horizontal"

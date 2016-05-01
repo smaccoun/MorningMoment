@@ -43,7 +43,8 @@ public class MorningRoutineDbHelper extends SQLiteOpenHelper {
                     RoutineContract.RoutineTask.COLUMN_NAME_TITLE + " TEXT UNIQUE NOT NULL " + COMMA_SEP +
                     RoutineContract.RoutineTask.COLUMN_NAME_DESC + TEXT_TYPE + COMMA_SEP +
                     RoutineContract.RoutineTask.COLUMN_NAME_DURATION_MS + INTEGER_TYPE + COMMA_SEP +
-                    RoutineContract.RoutineTask.COLUMN_NAME_WEB_URL + " TEXT DEFAULT ''" + ")";
+                    RoutineContract.RoutineTask.COLUMN_NAME_WEB_URL + " TEXT DEFAULT ''" + COMMA_SEP +
+                    RoutineContract.RoutineTask.COLUMN_NAME_VIDEO_URL + " TEXT DEFAULT ''" + ")";
 
     private static final String SQL_CREATE_ROUTINE_TASK_BRIDGE_TABLE =
             "CREATE TABLE " + RoutineContract.RoutineTaskBridge.TABLE_NAME + "(" +
@@ -68,6 +69,7 @@ public class MorningRoutineDbHelper extends SQLiteOpenHelper {
                             "rt.task_desc, " +
                             "rt.duration_ms AS task_duration, " +
                             "rt.web_url, " +
+                            "rt.video_url, " +
                             "b.order_no" +
                     " FROM Routine r " +
                     " INNER JOIN RoutineTaskBridge b ON b.routine_nm = r.routine_nm" +

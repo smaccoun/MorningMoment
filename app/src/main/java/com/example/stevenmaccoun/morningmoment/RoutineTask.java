@@ -2,6 +2,7 @@ package com.example.stevenmaccoun.morningmoment;
 
 import com.example.stevenmaccoun.morningmoment.utilities.DateFormatHandler;
 
+import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -16,16 +17,27 @@ public class RoutineTask {
     private String description;
     private long durationMillis;
     private String webUrlLink;
-
-    private static final SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss", Locale.US);
+    private String videoUrlPath;
 
     public RoutineTask(String title, String description, long durationSeconds, String webUrlLink){
         this.title = title;
         this.description = description;
         this.durationMillis = durationSeconds;
         this.webUrlLink = webUrlLink;
+    }
 
-        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+
+    public RoutineTask(String title, String description, long durationSeconds,
+                       String webUrlLink, String videoUrlPath){
+        this.title = title;
+        this.description = description;
+        this.durationMillis = durationSeconds;
+        this.webUrlLink = webUrlLink;
+        this.videoUrlPath = videoUrlPath;
+    }
+
+    public String getVideoUrlPath() {
+        return videoUrlPath;
     }
 
     public String getWebUrlLink() {

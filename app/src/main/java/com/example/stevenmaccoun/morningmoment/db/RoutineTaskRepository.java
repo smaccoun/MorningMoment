@@ -57,7 +57,7 @@ public class RoutineTaskRepository implements IRepository<RoutineTask, String> {
         SQLiteDatabase db = MorningRoutineDbHelper.getHelper(context).getWritableDatabase();
 
         Cursor cursor =
-                db.rawQuery("SELECT _id, task_nm, task_desc, duration_ms, web_url " +
+                db.rawQuery("SELECT _id, task_nm, task_desc, duration_ms, web_url, video_url " +
                         " FROM RoutineTask rt" +
                         " WHERE rt.task_nm = \"" + task_nm + "\"", null);
 
@@ -68,7 +68,10 @@ public class RoutineTaskRepository implements IRepository<RoutineTask, String> {
             String description = cursor.getString(cursor.getColumnIndexOrThrow("task_desc"));
             int duration = cursor.getInt(cursor.getColumnIndexOrThrow("duration_ms"));
             String webUrl = cursor.getString(cursor.getColumnIndexOrThrow(RoutineContract.RoutineTask.COLUMN_NAME_WEB_URL));
-            routineTask = new RoutineTask(name, description, duration, webUrl);
+            String videoUrl = cursor.getString(
+                    cursor.getColumnIndexOrThrow(RoutineContract.RoutineTask.COLUMN_NAME_VIDEO_URL)
+                        );
+            routineTask = new RoutineTask(name, description, duration, webUrl, videoUrl);
         }
 
         db.close();
@@ -86,6 +89,7 @@ public class RoutineTaskRepository implements IRepository<RoutineTask, String> {
         values.put("task_desc", task.getDescription());
         values.put("duration_ms", task.getDurationMillis());
         values.put("web_url", task.getWebUrlLink());
+        values.put("video_url", task.getVideoUrlPath());
 
         boolean success = db.insert("RoutineTask", null, values) > 0;
         db.close();
