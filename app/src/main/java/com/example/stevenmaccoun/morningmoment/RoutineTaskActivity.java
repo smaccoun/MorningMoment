@@ -3,6 +3,7 @@ package com.example.stevenmaccoun.morningmoment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.media.ToneGenerator;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.widget.Button;
+import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.VideoView;
 
@@ -29,6 +31,7 @@ public class RoutineTaskActivity extends AppCompatActivity {
     private TextView tvDuration;
     private TextView tvWebUrl;
     private VideoView videoView;
+    private Button playVideoB;
 
     private Button pauseResumeB;
     private final String PAUSE_TEXT = "Pause";
@@ -59,6 +62,7 @@ public class RoutineTaskActivity extends AppCompatActivity {
         tvWebUrl = (TextView) findViewById(R.id.url_link);
         pauseResumeB = (Button) findViewById(R.id.pause_resume_b);
         videoView = (VideoView) findViewById(R.id.videoView);
+        playVideoB = (Button) findViewById(R.id.play_video_b);
 
         currentTask = RoutineTaskManager.getInstance().getCurrentTask();
         String taskNm = currentTask.getTitle();
@@ -69,11 +73,23 @@ public class RoutineTaskActivity extends AppCompatActivity {
         tvTaskNm.setText(taskNm);
         tvTaskDesc.setText(routineDesc);
         tvDuration.setText(durationText);
-        if(videoUrl != null){
-            tvTaskDesc.setText(routineDesc + "\n" + videoUrl);
-        }
 
+        pauseResumeB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(currentTaskState == TASK_STATE.RUNNING){
+                    pauseResumeB.setText(RESUME_TEXT);
+                    timer.cancel();
+                    currentTaskState = TASK_STATE.PAUSED;
+                }
+                else if(currentTaskState == TASK_STATE.PAUSED){
+                    pauseResumeB.setText(PAUSE_TEXT);
+                    startCountdownTimer();
+                    currentTaskState = TASK_STATE.RUNNING;
+                }
 
+            }
+        });
 
         if(currentTask.getWebUrlLink().length() > 0){
             tvWebUrl.setVisibility(View.VISIBLE);
@@ -97,37 +113,59 @@ public class RoutineTaskActivity extends AppCompatActivity {
             tvWebUrl.setVisibility(View.GONE);
         }
 
+        if(videoUrl.length() > 0){
+            tvTaskDesc.setText(routineDesc + "\n" + videoUrl);
+            videoView.setVisibility(View.VISIBLE);
+            playVideoB.setVisibility(View.VISIBLE);
+            tvDuration.setVisibility(View.GONE);
+            pauseResumeB.setVisibility(View.GONE);
 
+            MediaController mediaController = new MediaController(RoutineTaskActivity.this);
+            mediaController.setAnchorView(videoView);
+            videoView.setMediaController(mediaController);
+            videoView.setVideoURI(Uri.parse(currentTask.getVideoUrlPath()));
 
-        pauseResumeB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(currentTaskState == TASK_STATE.RUNNING){
-                    pauseResumeB.setText(RESUME_TEXT);
-                    timer.cancel();
-                    currentTaskState = TASK_STATE.PAUSED;
+            playVideoB.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                        @Override
+                        public void onCompletion(MediaPlayer mp) {
+                            finishTask();
+                        }
+                    });
+
+                    videoView.start();
+                    tvTaskDesc.setVisibility(View.GONE);
+                    tvTaskNm.setVisibility(View.GONE);
+                    playVideoB.setVisibility(View.GONE);
                 }
-                else if(currentTaskState == TASK_STATE.PAUSED){
-                    pauseResumeB.setText(PAUSE_TEXT);
-                    startCountdownTimer(millisRemaining);
-                    currentTaskState = TASK_STATE.RUNNING;
-                }
+            });
 
-            }
-        });
+        } else{
+            videoView.setVisibility(View.GONE);
+            playVideoB.setVisibility(View.GONE);
 
-        long duration = DateFormatHandler.toLong(durationText);
-        startCountdownTimer(duration);
+            timer = new RoutineTaskCountdownTimer(currentTask.getDurationMillis(), 1000);
+            tvTaskNm.setVisibility(View.VISIBLE);
+            tvTaskDesc.setVisibility(View.VISIBLE);
+            tvDuration.setVisibility(View.VISIBLE);
+            pauseResumeB.setVisibility(View.VISIBLE);
+            startCountdownTimer();
+        }
+
+
 
     }
 
-    private void startCountdownTimer(long duration){
-        timer = new RoutineTaskCountdownTimer(duration, 1000);
+    private void startCountdownTimer(){
         timer.start();
     }
 
     public void finishRoutine(){
-        timer.cancel();
+        if(timer != null){
+            timer.cancel();
+        }
         AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
         builder1.setMessage("Congrats, you finished!");
         builder1.setCancelable(true);
@@ -173,18 +211,22 @@ public class RoutineTaskActivity extends AppCompatActivity {
 
         @Override
         public void onFinish() {
-            alertFinishedTask();
-
-            int taskNo = RoutineTaskManager.getInstance().incrementCurrentTaskNumber();
-            if(taskNo < 0){
-                finishRoutine();
-                return;
-            }
-
-            proceedNextTaskDialog();
+            finishTask();
         }
 
 
+    }
+
+    private void finishTask(){
+        alertFinishedTask();
+
+        int taskNo = RoutineTaskManager.getInstance().incrementCurrentTaskNumber();
+        if(taskNo < 0){
+            finishRoutine();
+            return;
+        }
+
+        proceedNextTaskDialog();
     }
 
     private void proceedNextTaskDialog(){

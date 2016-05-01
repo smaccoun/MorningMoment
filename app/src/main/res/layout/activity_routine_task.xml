@@ -57,6 +57,12 @@
             android:textSize="25dp"
             android:textColor="@color/abc_input_method_navigation_guard" />
 
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Play Video"
+            android:id="@+id/play_video_b" />
+
         <VideoView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
