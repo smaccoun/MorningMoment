@@ -7,16 +7,18 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".RoutineTaskActivity">
+    tools:context=".RoutineTaskActivity"
+    android:background="@color/abc_input_method_navigation_guard">
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="fill_parent"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:background="@android:color/holo_blue_bright">
+        android:background="@android:color/holo_blue_bright"
+        android:id="@+id/linearLayout">
 
         <TextView
             android:layout_width="wrap_content"
@@ -24,16 +26,18 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="Title"
             android:id="@+id/task_nm"
-            android:layout_gravity="center_horizontal" />
+            android:layout_gravity="center_horizontal"
+            android:textSize="40dp" />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="Description"
             android:id="@+id/task_desc"
             android:background="@color/design_textinput_error_color_dark"
-            android:textColor="@color/abc_input_method_navigation_guard" />
+            android:textColor="@color/abc_input_method_navigation_guard"
+            android:textSize="30dp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -44,11 +48,14 @@
             android:background="@color/material_deep_teal_200"
             android:textColor="@color/abc_input_method_navigation_guard" />
 
-        <Button
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="URL Link"
-            android:id="@+id/url_link" />
+            android:id="@+id/url_link"
+            android:background="@android:color/holo_red_light"
+            android:textSize="25dp"
+            android:textColor="@color/abc_input_method_navigation_guard" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -56,16 +63,24 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="00:00:00"
             android:id="@+id/task_duration"
-            android:layout_gravity="center_horizontal"
             android:background="@color/abc_input_method_navigation_guard"
-            android:textColor="@android:color/holo_green_light" />
+            android:textColor="@android:color/holo_green_light"
+            android:textSize="50dp"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="40dp" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="PAUSE"
             android:id="@+id/pause_resume_b"
-            android:layout_gravity="center_horizontal" />
+            android:layout_gravity="center_horizontal"
+            android:layout_below="@+id/task_duration"
+            android:layout_centerHorizontal="true" />
+
 
     </LinearLayout>
+
 </RelativeLayout>

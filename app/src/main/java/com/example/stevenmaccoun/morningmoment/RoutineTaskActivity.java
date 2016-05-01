@@ -9,8 +9,9 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.view.View;
-import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -25,7 +26,7 @@ public class RoutineTaskActivity extends AppCompatActivity {
     private TextView tvTaskNm;
     private TextView tvTaskDesc;
     private TextView tvDuration;
-    private Button webUrlB;
+    private TextView tvWebUrl;
 
     private Button pauseResumeB;
     private final String PAUSE_TEXT = "Pause";
@@ -37,6 +38,7 @@ public class RoutineTaskActivity extends AppCompatActivity {
     private TASK_STATE currentTaskState;
     private long millisRemaining;
 
+    private RoutineTask currentTask;
     private RoutineTaskCountdownTimer timer;
 
 
@@ -52,27 +54,31 @@ public class RoutineTaskActivity extends AppCompatActivity {
         tvTaskNm = (TextView) findViewById(R.id.task_nm);
         tvTaskDesc = (TextView) findViewById(R.id.task_desc);
         tvDuration = (TextView) findViewById(R.id.task_duration);
-        webUrlB = (Button) findViewById(R.id.url_link);
+        tvWebUrl = (TextView) findViewById(R.id.url_link);
         pauseResumeB = (Button) findViewById(R.id.pause_resume_b);
 
-        final RoutineTask currentTask = RoutineTaskManager.getInstance().getCurrentTask();
+        currentTask = RoutineTaskManager.getInstance().getCurrentTask();
         String taskNm = currentTask.getTitle();
         String routineDesc = currentTask.getDescription();
         String durationText = currentTask.getDurationString();
-        String webUrl = currentTask.getWebUrlLink();
 
         tvTaskNm.setText(taskNm);
         tvTaskDesc.setText(routineDesc);
         tvDuration.setText(durationText);
 
-        if(webUrl.length() > 0){
-            webUrlB.setVisibility(View.VISIBLE);
-            webUrlB.setText(webUrl);
-            webUrlB.setOnClickListener(new View.OnClickListener() {
+
+
+        if(currentTask.getWebUrlLink().length() > 0){
+            tvWebUrl.setVisibility(View.VISIBLE);
+            String url = currentTask.getWebUrlLink();
+            tvWebUrl.setClickable(true);
+            tvWebUrl.setMovementMethod(LinkMovementMethod.getInstance());
+            String htmlUrl = "<u>" + url + "</u>";
+            tvWebUrl.setText(Html.fromHtml(htmlUrl));
+            tvWebUrl.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Button b = (Button) v;
-                    String webUrl = b.getText().toString();
+                    String webUrl = currentTask.getWebUrlLink();
                     if (!webUrl.startsWith("http://") && !webUrl.startsWith("https://"))
                         webUrl = "http://" + webUrl;
                     Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(webUrl));
@@ -81,7 +87,7 @@ public class RoutineTaskActivity extends AppCompatActivity {
             });
         }
         else{
-            webUrlB.setVisibility(View.GONE);
+            tvWebUrl.setVisibility(View.GONE);
         }
 
 
