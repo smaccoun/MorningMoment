@@ -3,6 +3,7 @@ package com.example.stevenmaccoun.morningmoment;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -93,8 +94,12 @@ public class CreateRoutineTaskActivity extends AppCompatActivity {
 
                     // Get the File path from the Uri
                     String path = FileUtils.getPath(this, uri);
+                    MediaPlayer mp = MediaPlayer.create(this, Uri.parse(path));
+                    int duration = mp.getDuration();
+                    mp.release();
                     tvVideoURLPath.setText(path);
                     tvVideoURLPath.setVisibility(View.VISIBLE);
+                    tvDuration.setText(DateFormatHandler.toString(duration));
                     // Alternatively, use FileUtils.getFile(Context, Uri)
                     if (path != null && FileUtils.isLocal(path)) {
                         File file = new File(path);

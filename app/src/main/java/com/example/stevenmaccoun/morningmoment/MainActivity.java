@@ -28,16 +28,11 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     private ListView popularLV;
-    private Button createRoutineB;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        this.deleteDatabase("MorningRoutine.db");
 
         initializePopularLV();
 
