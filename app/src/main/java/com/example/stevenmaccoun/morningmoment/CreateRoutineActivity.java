@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,12 +18,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.stevenmaccoun.morningmoment.db.RoutineContract;
 import com.example.stevenmaccoun.morningmoment.db.RoutineRepository;
 import com.example.stevenmaccoun.morningmoment.db.RoutineTaskRepository;
-import com.example.stevenmaccoun.morningmoment.utilities.DateFormatHandler;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 
 public class CreateRoutineActivity extends AppCompatActivity {
@@ -87,13 +85,7 @@ public class CreateRoutineActivity extends AppCompatActivity {
             }
         });
 
-        viewTasksB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                populateTaskLV();
-                tasksLV.setVisibility(View.VISIBLE);
-            }
-        });
+        viewTasksB.setOnClickListener(new ViewTaskBClickListener());
 
         tasksLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -106,7 +98,61 @@ public class CreateRoutineActivity extends AppCompatActivity {
         });
     }
 
-    @Override
+    private class ViewTaskBClickListener implements View.OnClickListener {
+
+        private ArrayList<RoutineTask> selectedTasks = new ArrayList<>();
+
+        @Override
+        public void onClick(View v) {
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(CreateRoutineActivity.this);
+                LayoutInflater inflater = getLayoutInflater();
+                View convertView = (View) inflater.inflate(R.layout.dialog_lv, null);
+                alertDialog.setView(convertView);
+                alertDialog.setTitle("Task List");
+                alertDialog.setMessage("Select one or more tasks from the list");
+                alertDialog.setPositiveButton("Finish", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                for(RoutineTask rt : selectedTasks){
+                                    currentTasks.add(rt);
+                                }
+                                selectedTasks.clear();
+                                displayCurrentTasks();
+                            }
+                        });
+                ListView lv = (ListView) convertView.findViewById(R.id.listView);
+                ArrayList<RoutineTask> routineTasks =
+                        new RoutineTaskRepository(CreateRoutineActivity.this)
+                                .GetAll(CreateRoutineActivity.this);
+
+                TaskListAdapter taskListAdapter = new TaskListAdapter(CreateRoutineActivity.this, routineTasks);
+
+                lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+
+                    private ArrayList<Integer> selectedIndeces = new ArrayList<>();
+
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                        if(!selectedIndeces.contains(position) || selectedIndeces.size() == 0) {
+                            selectedIndeces.add(position);
+                            parent.getChildAt(position).setBackgroundColor(Color.GREEN);
+                            RoutineTask routineTask = (RoutineTask) parent.getItemAtPosition(position);
+                            selectedTasks.add(routineTask);
+                        }else{
+                            selectedIndeces.remove(selectedIndeces.indexOf(position));
+                            selectedTasks.remove(parent.getItemAtPosition(position));
+                            view.setBackgroundColor(Color.TRANSPARENT);
+                        }
+                    }
+                });
+                lv.setAdapter(taskListAdapter);
+                alertDialog.show();
+        }
+    }
+
+
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch(requestCode) {
@@ -234,5 +280,7 @@ public class CreateRoutineActivity extends AppCompatActivity {
         super.onResume();
         tasksLV.setVisibility(View.GONE);
     }
+
+
 
 }
