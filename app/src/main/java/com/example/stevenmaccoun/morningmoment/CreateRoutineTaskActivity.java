@@ -11,16 +11,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.stevenmaccoun.morningmoment.db.RoutineTaskRepository;
 import com.example.stevenmaccoun.morningmoment.utilities.DateFormatHandler;
 import com.ipaulpro.afilechooser.utils.FileUtils;
 
-import org.w3c.dom.Text;
-
 import java.io.File;
-import java.text.ParseException;
 
 public class CreateRoutineTaskActivity extends AppCompatActivity {
 
@@ -28,7 +24,8 @@ public class CreateRoutineTaskActivity extends AppCompatActivity {
     private TextView tvName;
     private TextView tvDesc;
     private TextView tvDuration;
-    private TextView tvWebUrl;
+    private Button addWebUrlB;
+    private TextView tvWebUrlEntry;
     private Button addVideoB;
     private TextView tvVideoURLPath;
 
@@ -43,10 +40,13 @@ public class CreateRoutineTaskActivity extends AppCompatActivity {
         tvName = (TextView) findViewById(R.id.nm_entry);
         tvDesc = (TextView) findViewById(R.id.desc_entry);
         tvDuration = (TextView) findViewById(R.id.duration_entry);
-        tvWebUrl = (TextView) findViewById(R.id.web_url_entry);
+        addWebUrlB = (Button) findViewById(R.id.add_web_url_b);
+        tvWebUrlEntry = (TextView) findViewById(R.id.web_url_entry);
         addVideoB = (Button) findViewById(R.id.add_video_b);
         tvVideoURLPath = (TextView) findViewById(R.id.tv_video_url_path);
+
         tvVideoURLPath.setVisibility(View.GONE);
+        tvWebUrlEntry.setVisibility(View.GONE);
 
         createTaskB = (Button) findViewById(R.id.save);
         createTaskB.setOnClickListener(new View.OnClickListener() {
@@ -56,7 +56,7 @@ public class CreateRoutineTaskActivity extends AppCompatActivity {
                 if(isValidForm()){
                     String name = tvName.getText().toString();
                     String desc = tvDesc.getText().toString();
-                    String webUrl = tvWebUrl.getText().toString();
+                    String webUrl = tvWebUrlEntry.getText().toString();
                     String videoUrl = tvVideoURLPath.getText().toString();
                     long duration = DateFormatHandler.toLong(tvDuration.getText().toString());
 
@@ -80,6 +80,13 @@ public class CreateRoutineTaskActivity extends AppCompatActivity {
 
                 Intent intent = Intent.createChooser(getContentIntent, "Select a file");
                 startActivityForResult(intent, REQUEST_CHOOSER);
+            }
+        });
+
+        addWebUrlB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tvWebUrlEntry.setVisibility(View.VISIBLE);
             }
         });
     }

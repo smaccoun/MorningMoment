@@ -55,18 +55,6 @@
         android:ems="10"
         android:id="@+id/duration_entry" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Web URL"
-        android:id="@+id/tv_web_url" />
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/web_url_entry" />
-
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -83,8 +71,20 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="Add Web URL"
+        android:id="@+id/add_web_url_b" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/web_url_entry" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="SAVE"
         android:id="@+id/save"
         android:layout_gravity="center_horizontal"
         android:background="@android:color/holo_blue_bright" />
+
 </LinearLayout>
