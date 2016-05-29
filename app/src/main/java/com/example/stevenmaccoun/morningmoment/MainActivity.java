@@ -85,6 +85,13 @@ public class MainActivity extends AppCompatActivity {
                 RoutineController.getInstance().refresh();
                 startActivity(i);
                 return true;
+            case R.id.delete_all_routines:
+                MorningRoutineDbHelper mDbHelper = MorningRoutineDbHelper.getHelper(getApplicationContext());
+                SQLiteDatabase db = mDbHelper.getWritableDatabase();
+                db.delete("Routine", null, null);
+                db.close();
+                onResume();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

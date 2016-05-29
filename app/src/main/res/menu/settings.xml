@@ -6,4 +6,9 @@
         app:showAsAction="always"
         android:title="+ Routine">
     </item>
+    <item
+        android:id="@+id/delete_all_routines"
+        app:showAsAction="always"
+        android:title="Delete all routines">
+    </item>
 </menu>
