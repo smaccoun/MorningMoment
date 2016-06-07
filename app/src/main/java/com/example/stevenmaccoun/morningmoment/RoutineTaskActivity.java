@@ -18,8 +18,6 @@ import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.VideoView;
 
-import com.example.stevenmaccoun.morningmoment.utilities.DateFormatHandler;
-
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -62,7 +60,7 @@ public class RoutineTaskActivity extends AppCompatActivity {
         tvWebUrl = (TextView) findViewById(R.id.url_link);
         pauseResumeB = (Button) findViewById(R.id.pause_resume_b);
         videoView = (VideoView) findViewById(R.id.videoView);
-        playVideoB = (Button) findViewById(R.id.play_video_b);
+        playVideoB = (Button) findViewById(R.id.play_media_b);
 
         currentTask = RoutineTaskManager.getInstance().getCurrentTask();
         String taskNm = currentTask.getTitle();
@@ -114,7 +112,7 @@ public class RoutineTaskActivity extends AppCompatActivity {
         }
 
         if(videoUrl.length() > 0){
-            tvTaskDesc.setText(routineDesc + "\n" + videoUrl);
+            tvTaskDesc.setText(routineDesc + "\n" + "Click the button below to start");
             videoView.setVisibility(View.VISIBLE);
             playVideoB.setVisibility(View.VISIBLE);
             tvDuration.setVisibility(View.GONE);
